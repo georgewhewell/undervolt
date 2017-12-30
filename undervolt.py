@@ -48,7 +48,7 @@ def convert_offset(mV):
     'f9a00000'
 
     """
-    return format(0xFFE00000 & ((round(mV*1.024) & 0xFFF) << 21), '08x')
+    return format(0xFFE00000 & ((int(round(mV*1.024)) & 0xFFF) << 21), '08x')
 
 
 def get_msr_value(plane, mV, write=True):
