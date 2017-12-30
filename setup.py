@@ -11,10 +11,10 @@ def test_suite():
 
 setup(
     name='undervolt',
-    version='0.1.1',
+    version='0.1.2',
     description='Undervolt Intel CPUs under Linux',
     long_description=open(
-        join(dirname(__file__), 'README.rst'), encoding='utf-8').read(),
+        join(dirname(__file__), 'README.rst')).read(),
     url='http://github.com/georgewhewell/undervolt',
     author='George Whewell',
     author_email='georgerw@gmail.com',
