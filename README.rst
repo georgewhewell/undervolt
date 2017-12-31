@@ -55,6 +55,17 @@ Usage
       --analogio ANALOGIO   offset (mV)
       --digitalio DIGITALIO offset (mV)
 
+Hardware support
+----------------
+
+Undervolting should work on any CPU later then Haswell.
+
+===================== ========= ==========
+      System             CPU     Working?
+===================== ========= ==========
+Lenovo X1 Yoga Gen 2  i7-7600U  Yes
+===================== ========= ==========
+
 Credit
 ------
 This project is trivial wrapper around the work of others from the following resources:
