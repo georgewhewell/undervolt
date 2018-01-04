@@ -35,7 +35,6 @@ Read current offsets::
     cache: -30.27 mV
     uncore: -29.3 mV
     analogio: -70.31 mV
-    digitalio: 8000.0 mV
 
 Apply -100mV offset to CPU Core and Cache::
 
@@ -53,7 +52,6 @@ Usage
     $ undervolt -h
     usage: undervolt [-h] [-v] [-f] [--core CORE] [--gpu GPU] [--cache CACHE]
                      [--uncore UNCORE] [--analogio ANALOGIO]
-                     [--digitalio DIGITALIO]
     optional arguments:
       -h, --help            show this help message and exit
       -v, --verbose         print debug info
@@ -64,7 +62,6 @@ Usage
       --cache CACHE         offset (mV)
       --uncore UNCORE       offset (mV)
       --analogio ANALOGIO   offset (mV)
-      --digitalio DIGITALIO offset (mV)
 
 Hardware support
 ----------------

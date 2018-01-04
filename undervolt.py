@@ -16,7 +16,7 @@ PLANES = {
     'cache': 2,
     'uncore': 3,
     'analogio': 4,
-    'digitalio': 5,
+#   'digitalio': 5, # not working?
 }
 
 
