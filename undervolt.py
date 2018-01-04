@@ -56,8 +56,42 @@ def convert_offset(mV):
     'f9a00000'
 
     """
-    return format(0xFFE00000 & ((int(round(mV*1.024)) & 0xFFF) << 21), '08x')
+    return format(convert_rounded_offset(int(round(mV*1.024))), '08x')
 
+def unconvert_offset(y):
+    """ For a given offset, return a value in mV that could have resulted in
+        that offset.
+
+        Inverts y to give the input value x closest to zero for values x in
+        [-1000, 1000]
+
+    # Test that inverted values give the same output when re-converted.
+    # NOTE: domain is [-1000, 1000] - other function, but scaled down by 1.024.
+    >>> domain = [ 1000 - x for x in range(0, 2000) ]
+    >>> result = True
+    >>> for x in domain:
+    ...     y  = int(convert_offset(x), 16)
+    ...     x2 = round(unconvert_offset(y))
+    ...     y2 = int(convert_offset(x2), 16)
+    ...     if y != y2 or x != x2:
+    ...         result = (x, y, x2, y2)
+    ...         break
+    >>> result
+    True
+    """
+    return unconvert_rounded_offset(y) / 1.024
+
+def convert_rounded_offset(x):
+    return 0xFFE00000 & ((x & 0xFFF) << 21)
+
+def unconvert_rounded_offset(y):
+    """
+    >>> domain = [ 1024 - x for x in range(0, 2048) ]
+    >>> all( x == unconvert_rounded_offset(convert_rounded_offset(x)) for x in domain )
+    True
+    """
+    x = y >> 21
+    return x if x <= 1024 else - (2048 - x)
 
 def pack_offset(plane, offset=None):
     """
