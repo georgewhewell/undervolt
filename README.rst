@@ -27,13 +27,23 @@ From source::
 Examples
 --------
 
+Read current offsets::
+
+    $ undervolt --read
+    core: 0.0 mV
+    gpu: -19.53 mV
+    cache: -30.27 mV
+    uncore: -29.3 mV
+    analogio: -70.31 mV
+    digitalio: 8000.0 mV
+
 Apply -100mV offset to CPU Core and Cache::
 
-    undervolt --core -100 --cache -100
+    $ undervolt --core -100 --cache -100
 
 Apply -75mV offset to GPU, -100mV to all other planes::
 
-    undervolt --gpu -75 --core -100 --cache -100 --uncore -100 --analogio -100
+    $ undervolt --gpu -75 --core -100 --cache -100 --uncore -100 --analogio -100
 
 Usage
 -----
@@ -48,6 +58,7 @@ Usage
       -h, --help            show this help message and exit
       -v, --verbose         print debug info
       -f, --force           allow setting positive offsets
+      -r, --read            read existing values
       --core CORE           offset (mV)
       --gpu GPU             offset (mV)
       --cache CACHE         offset (mV)
