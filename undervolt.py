@@ -24,6 +24,7 @@ def write_msr(val, msr=0x150):
     """
     Use /dev/cpu/*/msr interface provided by msr module to read/write
     values from register 0x150.
+    Writes to all msr node on all CPUs available.
     """
     n = glob('/dev/cpu/[0-9]*/msr')
     for c in n:
@@ -38,6 +39,9 @@ def write_msr(val, msr=0x150):
 
 
 def read_msr(msr=0x150, cpu=0):
+    """
+    Read a value from single msr node on given CPU (defaults to first)
+    """
     n = '/dev/cpu/%d/msr' % (cpu,)
     f = os.open(n, os.O_RDONLY)
     os.lseek(f, msr, os.SEEK_SET)
@@ -48,6 +52,9 @@ def read_msr(msr=0x150, cpu=0):
 
 
 def read_offset(plane):
+    """
+    Write the 'read' value to mailbox, then re-read
+    """
     value_to_write = pack_offset(plane)
     write_msr(value_to_write)
     return read_msr()
@@ -114,26 +121,21 @@ def pack_offset(plane, offset='0'*8):
     """
     Get MSR value that writes (or read) offset to given plane
     :param plane: voltage plane as string (e.g. 'core', 'gpu')
-    :param mV: offset as int (e.g. -50)
-    :param write: generate value for writing (else reading)
-    :return value as int ready to write to register
+    :param offset: voltage offset as hex string (omit for read)
+    :return value as long int ready to write to register
 
     # Write
     >>> from undervolt import pack_offset
-    >>> pack_offset('core', 'ecc00000')
-    9223372113841225728
-    >>> pack_offset('gpu', 'f0000000')
-    9223373213407379456
-    >>> pack_offset('cache', 'ecc00000')
-    9223374312864481280
+    >>> format(pack_offset('core', 'ecc00000'), 'x')
+    '80000011ecc00000'
+    >>> format(pack_offset('gpu', 'f0000000'), 'x')
+    '80000111f0000000'
 
     # Read
-    >>> pack_offset('core')
-    9223372105574252544
-    >>> pack_offset('gpu')
-    9223373205085880320
-    >>> pack_offset('cache')
-    9223374304597508096
+    >>> format(pack_offset('core'), 'x')
+    '8000001000000000'
+    >>> format(pack_offset('gpu'), 'x')
+    '8000011000000000'
 
     """
     return int("0x80000{plane}1{write}{offset}".format(
@@ -144,6 +146,10 @@ def pack_offset(plane, offset='0'*8):
 
 
 def set_offset(plane, mV):
+    """"
+    Set given voltage plane to offset mV
+    Raises SystemExit if re-reading value returns something different
+    """
     logging.info('Setting {plane} offset to {mV}mV'.format(
         plane=plane, mV=mV))
     target = convert_offset(mV)
