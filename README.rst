@@ -2,9 +2,13 @@
 
 *This program is untested (apart from by myself) and it may damage your hardware! Use at your own risk.*
 
-=========
-undervolt
-=========
+==================
+undervolt |travis|
+==================
+
+.. |travis| image:: https://travis-ci.org/georgewhewell/undervolt.svg
+    :target: https://travis-ci.org/georgewhewell/undervolt
+    :alt: Build Status
 
 *undervolt* is a program for undervolting Intel CPUs under Linux. It works in
 a similar manner to the Windows program *ThrottleStop* (i.e, `MSR 0x150`). You
