@@ -102,8 +102,8 @@ def unconvert_rounded_offset(y):
     >>> all( x == unconvert_rounded_offset(convert_rounded_offset(x)) for x in domain )
     True
     """
-    x = y >> 21
-    return x if x <= 1024 else - (2048 - x)
+    y >>= 21
+    return 1024 - abs(y - 1024)
 
 
 def pack_offset(plane, offset='0'*8):
