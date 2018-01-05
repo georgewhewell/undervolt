@@ -87,6 +87,10 @@ def unconvert_offset(y):
     ...         break
     >>> result
     True
+    >>> unconvert_offset(0xf0000000)
+    -125.0
+    >>> unconvert_offset(0xf9a00000)
+    -49.8046875
     """
     return unconvert_rounded_offset(y) / 1.024
 
