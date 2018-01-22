@@ -9,6 +9,7 @@ import logging
 import os
 from glob import glob
 from struct import pack, unpack
+import subprocess
 
 PLANES = {
     'core': 0,
@@ -178,7 +179,8 @@ def main():
     args = parser.parse_args()
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
-
+    
+    subprocess.call(['modprobe','msr'])
     if args.read:
         for plane in PLANES:
             msr_value = read_offset(plane)
