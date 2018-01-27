@@ -180,7 +180,8 @@ def main():
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
     
-    subprocess.call(['modprobe','msr'])
+    if not glob('/dev/cpu/*/msr'):
+        subprocess.check_call(['modprobe','msr'])
     if args.read:
         for plane in PLANES:
             msr_value = read_offset(plane)
