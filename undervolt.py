@@ -10,6 +10,7 @@ import os
 from glob import glob
 from struct import pack, unpack
 import subprocess
+import configparser
 
 PLANES = {
     'core': 0,
@@ -172,6 +173,10 @@ def main():
     parser.add_argument('-f', '--force', action='store_true',
                         help="allow setting positive offsets")
     parser.add_argument('-r', '--read', action="store_true", help="read existing values")
+    parser.add_argument('--throttlestop', type=str,
+                        help="extract values from ThrottleStop")
+    parser.add_argument('--tsindex', type=int,
+                        default=0, help="ThrottleStop profile index")
 
     for plane in PLANES:
         parser.add_argument('--{}'.format(plane), type=int, help="offset (mV)")
@@ -198,6 +203,24 @@ def main():
         if offset > 0 and not args.force:
             raise ValueError("Use --force to set positive offset")
         set_offset(plane, offset)
+
+    throttlestop = getattr(args, 'throttlestop')
+
+    if throttlestop is not None:
+        command = 'undervolt'
+        tsindex = getattr(args, 'tsindex')
+        config = configparser.ConfigParser()
+        config.read(throttlestop)
+        ts = config['ThrottleStop']
+        for plane in PLANES:
+            hex_str = ts['FIVRVoltage{plane}{profile}'.format(
+                plane=PLANES[plane], profile=tsindex)]
+            hex_value = int(hex_str, 16)
+            if hex_value != 0:
+                offset = unconvert_offset(hex_value)
+                command += ' --{plane} {offset}'.format(plane=plane, offset=offset)
+        print(command)
+
 
 
 if __name__ == '__main__':
