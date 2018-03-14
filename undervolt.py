@@ -17,8 +17,8 @@ PLANES = {
     'cache': 2,
     'uncore': 3,
     'analogio': 4,
-#   'digitalio': 5, # not working?
-}
+    # 'digitalio': 5, # not working?
+    }
 
 
 def write_msr(val, msr=0x150):
@@ -73,6 +73,7 @@ def convert_offset(mV):
 
     """
     return format(convert_rounded_offset(int(round(mV*1.024))), '08x')
+
 
 def unconvert_offset(y):
     """ For a given offset, return a value in mV that could have resulted in
@@ -143,7 +144,7 @@ def pack_offset(plane, offset='0'*8):
         plane=PLANES[plane],
         write=int(offset is not '0'*8),
         offset=offset,
-    ), 0)
+        ), 0)
 
 
 def set_offset(plane, mV):
@@ -179,9 +180,9 @@ def main():
     args = parser.parse_args()
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
-    
+
     if not glob('/dev/cpu/*/msr'):
-        subprocess.check_call(['modprobe','msr'])
+        subprocess.check_call(['modprobe', 'msr'])
     if args.read:
         for plane in PLANES:
             msr_value = read_offset(plane)
