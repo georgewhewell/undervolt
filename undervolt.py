@@ -10,7 +10,10 @@ import os
 from glob import glob
 from struct import pack, unpack
 import subprocess
-import configparser
+try:  # Python3
+    import configparser
+except ImportError:  # Python2
+    import ConfigParser as configparser
 
 PLANES = {
     'core': 0,
