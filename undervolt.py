@@ -10,6 +10,10 @@ import os
 from glob import glob
 from struct import pack, unpack
 import subprocess
+try:  # Python3
+    import configparser
+except ImportError:  # Python2
+    import ConfigParser as configparser
 
 PLANES = {
     'core': 0,
@@ -17,8 +21,8 @@ PLANES = {
     'cache': 2,
     'uncore': 3,
     'analogio': 4,
-#   'digitalio': 5, # not working?
-}
+    # 'digitalio': 5, # not working?
+    }
 
 
 def write_msr(val, msr=0x150):
@@ -73,6 +77,7 @@ def convert_offset(mV):
 
     """
     return format(convert_rounded_offset(int(round(mV*1.024))), '08x')
+
 
 def unconvert_offset(y):
     """ For a given offset, return a value in mV that could have resulted in
@@ -143,7 +148,7 @@ def pack_offset(plane, offset='0'*8):
         plane=PLANES[plane],
         write=int(offset is not '0'*8),
         offset=offset,
-    ), 0)
+        ), 0)
 
 
 def set_offset(plane, mV):
@@ -171,6 +176,10 @@ def main():
     parser.add_argument('-f', '--force', action='store_true',
                         help="allow setting positive offsets")
     parser.add_argument('-r', '--read', action="store_true", help="read existing values")
+    parser.add_argument('--throttlestop', type=str,
+                        help="extract values from ThrottleStop")
+    parser.add_argument('--tsindex', type=int,
+                        default=0, help="ThrottleStop profile index")
 
     for plane in PLANES:
         parser.add_argument('--{}'.format(plane), type=int, help="offset (mV)")
@@ -179,9 +188,9 @@ def main():
     args = parser.parse_args()
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
-    
+
     if not glob('/dev/cpu/*/msr'):
-        subprocess.check_call(['modprobe','msr'])
+        subprocess.check_call(['modprobe', 'msr'])
     if args.read:
         for plane in PLANES:
             msr_value = read_offset(plane)
@@ -197,6 +206,24 @@ def main():
         if offset > 0 and not args.force:
             raise ValueError("Use --force to set positive offset")
         set_offset(plane, offset)
+
+    throttlestop = getattr(args, 'throttlestop')
+
+    if throttlestop is not None:
+        command = 'undervolt'
+        tsindex = getattr(args, 'tsindex')
+        config = configparser.ConfigParser()
+        config.read(throttlestop)
+        ts = config['ThrottleStop']
+        for plane in PLANES:
+            hex_str = ts['FIVRVoltage{plane}{profile}'.format(
+                plane=PLANES[plane], profile=tsindex)]
+            hex_value = int(hex_str, 16)
+            if hex_value != 0:
+                offset = unconvert_offset(hex_value)
+                command += ' --{plane} {offset}'.format(plane=plane, offset=offset)
+        print(command)
+
 
 
 if __name__ == '__main__':
