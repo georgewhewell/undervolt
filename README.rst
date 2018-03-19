@@ -48,19 +48,30 @@ Apply -75mV offset to GPU, -100mV to all other planes::
 
     $ undervolt --gpu -75 --core -100 --cache -100 --uncore -100 --analogio -100
 
+Generated the command to run to recreate your Throttlestop settings::
+
+    $ undervolt --throttlestop ThrottleStop.ini --tsindex 3
+    undervolt --core -100.5859375
+    $ undervolt --throttlestop ThrottleStop.ini
+    undervolt --core -125.0 --gpu -125.0 --cache -125.0
+
 Usage
 -----
 
 .. code-block:: bash
 
     $ undervolt -h
-    usage: undervolt [-h] [-v] [-f] [--core CORE] [--gpu GPU] [--cache CACHE]
+    usage: undervolt [-h] [-v] [-f] [-r] [--throttlestop THROTTLESTOP]
+                     [--tsindex TSINDEX] [--core CORE] [--gpu GPU] [--cache CACHE]
                      [--uncore UNCORE] [--analogio ANALOGIO]
     optional arguments:
       -h, --help            show this help message and exit
       -v, --verbose         print debug info
       -f, --force           allow setting positive offsets
       -r, --read            read existing values
+      --throttlestop THROTTLESTOP
+                            extract values from ThrottleStop
+      --tsindex TSINDEX     ThrottleStop profile index
       --core CORE           offset (mV)
       --gpu GPU             offset (mV)
       --cache CACHE         offset (mV)
@@ -77,6 +88,7 @@ Undervolting should work on any CPU later then Haswell.
 ===================== ========= ==========
 Lenovo X1 Yoga Gen 2  i7-7600U  Yes
 Dell Xps 15 9550      i7-6700HQ Yes
+Dell Xps 15 9560      i7-7700HQ Yes
 Lenovo Thinkpad T470p i7-7700HQ Yes
 ===================== ========= ==========
 
