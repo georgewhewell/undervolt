@@ -11,7 +11,7 @@ def test_suite():
 
 setup(
     name='undervolt',
-    version='0.1.3',
+    version='0.2.3',
     description='Undervolt Intel CPUs under Linux',
     long_description=open(
         join(dirname(__file__), 'README.rst')).read(),
