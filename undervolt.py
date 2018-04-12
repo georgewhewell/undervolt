@@ -56,15 +56,6 @@ def read_msr(msr=0x150, cpu=0):
     return val
 
 
-def read_offset(plane):
-    """
-    Write the 'read' value to mailbox, then re-read
-    """
-    value_to_write = pack_offset(plane)
-    write_msr(value_to_write)
-    return read_msr()
-
-
 def convert_offset(mV):
     """
     Calculate offset part of MSR value
@@ -123,32 +114,57 @@ def unconvert_rounded_offset(y):
     return x if x <= 1024 else - (2048 - x)
 
 
-def pack_offset(plane, offset='0'*8):
+def pack_offset(plane_index, offset='0'*8):
     """
     Get MSR value that writes (or read) offset to given plane
-    :param plane: voltage plane as string (e.g. 'core', 'gpu')
+    :param plane: voltage plane index
     :param offset: voltage offset as hex string (omit for read)
     :return value as long int ready to write to register
 
     # Write
     >>> from undervolt import pack_offset
-    >>> format(pack_offset('core', 'ecc00000'), 'x')
+    >>> format(pack_offset(0, 'ecc00000'), 'x')
     '80000011ecc00000'
-    >>> format(pack_offset('gpu', 'f0000000'), 'x')
+    >>> format(pack_offset(1, 'f0000000'), 'x')
     '80000111f0000000'
 
     # Read
-    >>> format(pack_offset('core'), 'x')
+    >>> format(pack_offset(0), 'x')
     '8000001000000000'
-    >>> format(pack_offset('gpu'), 'x')
+    >>> format(pack_offset(1), 'x')
     '8000011000000000'
 
     """
     return int("0x80000{plane}1{write}{offset}".format(
-        plane=PLANES[plane],
+        plane=plane_index,
         write=int(offset is not '0'*8),
         offset=offset,
         ), 0)
+
+
+def unpack_offset(msr_response):
+    """
+    Extract the offset component of the response and unpack to voltage.
+    >>> from undervolt import unpack_offset
+    >>> unpack_offset(0x0)
+    0.0
+    >>> unpack_offset(0x40000000000)
+    0.0
+    >>> unpack_offset(0x100f3400000)
+    -99.609375
+    """
+    plane_index = int(msr_response / (1 << 40))
+    return unconvert_offset(msr_response ^ (plane_index << 40))
+
+
+def read_offset(plane):
+    """
+    Write the 'read' value to mailbox, then re-read
+    """
+    plane_index = PLANES[plane]
+    value_to_write = pack_offset(plane_index)
+    write_msr(value_to_write)
+    return unpack_offset(read_msr())
 
 
 def set_offset(plane, mV):
@@ -156,13 +172,14 @@ def set_offset(plane, mV):
     Set given voltage plane to offset mV
     Raises SystemExit if re-reading value returns something different
     """
+    plane_index = PLANES[plane]
     logging.info('Setting {plane} offset to {mV}mV'.format(
         plane=plane, mV=mV))
     target = convert_offset(mV)
-    write_value = pack_offset(plane, target)
+    write_value = pack_offset(plane_index, target)
     write_msr(write_value)
     # now check value set correctly
-    read = format(read_offset(plane), '08x')
+    read = format(read_msr(), '08x')
     if read != target:
         logging.error("Failed to set {p}: expected {t}, read {r}".format(
             p=plane, t=target, r=format(read, '08x')))
@@ -220,8 +237,7 @@ def main():
 
     if args.read:
         for plane in PLANES:
-            msr_value = read_offset(plane)
-            voltage = unconvert_offset(msr_value)
+            voltage = read_offset(plane)
             print('{plane}: {voltage} mV'.format(
                 plane=plane, voltage=round(voltage, 2)))
 
