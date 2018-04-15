@@ -22,7 +22,7 @@ PLANES = {
     'uncore': 3,
     'analogio': 4,
     # 'digitalio': 5, # not working?
-    }
+}
 
 
 def write_msr(val, msr=0x150):
@@ -63,11 +63,11 @@ def convert_offset(mV):
     :return hex string
 
     >>> from undervolt import convert_offset
-    >>> convert_offset(-50)
+    >>> format(convert_offset(-50), '08x')
     'f9a00000'
 
     """
-    return format(convert_rounded_offset(int(round(mV*1.024))), '08x')
+    return convert_rounded_offset(int(round(mV*1.024)))
 
 
 def unconvert_offset(y):
@@ -75,22 +75,18 @@ def unconvert_offset(y):
         that offset.
 
         Inverts y to give the input value x closest to zero for values x in
-        [-1000, 1000]
+        [-999, 1000]
 
     # Test that inverted values give the same output when re-converted.
     # NOTE: domain is [-1000, 1000] - other function, but scaled down by 1.024.
     >>> from undervolt import convert_offset, unconvert_offset
-    >>> domain = [ 1000 - x for x in range(0, 2000) ]
-    >>> result = True
-    >>> for x in domain:
-    ...     y  = int(convert_offset(x), 16)
-    ...     x2 = round(unconvert_offset(y))
-    ...     y2 = int(convert_offset(x2), 16)
+    >>> for x in range(-999, 1000):
+    ...     y  = convert_offset(x)
+    ...     x2 = unconvert_offset(y)
+    ...     y2 = convert_offset(x2)
     ...     if y != y2 or x != x2:
     ...         result = (x, y, x2, y2)
-    ...         break
-    >>> result
-    True
+    ...         assert result
     >>> unconvert_offset(0xf0000000)
     -125.0
     >>> unconvert_offset(0xf9a00000)
@@ -114,7 +110,7 @@ def unconvert_rounded_offset(y):
     return x if x <= 1024 else - (2048 - x)
 
 
-def pack_offset(plane_index, offset='0'*8):
+def pack_offset(plane_index, offset=None):
     """
     Get MSR value that writes (or read) offset to given plane
     :param plane: voltage plane index
@@ -123,9 +119,9 @@ def pack_offset(plane_index, offset='0'*8):
 
     # Write
     >>> from undervolt import pack_offset
-    >>> format(pack_offset(0, 'ecc00000'), 'x')
+    >>> format(pack_offset(0, 0xecc00000), 'x')
     '80000011ecc00000'
-    >>> format(pack_offset(1, 'f0000000'), 'x')
+    >>> format(pack_offset(1, 0xf0000000), 'x')
     '80000111f0000000'
 
     # Read
@@ -137,9 +133,9 @@ def pack_offset(plane_index, offset='0'*8):
     """
     return int("0x80000{plane}1{write}{offset}".format(
         plane=plane_index,
-        write=int(offset is not '0'*8),
-        offset=offset,
-        ), 0)
+        write=int(offset is not None),
+        offset=format(offset or 0, '08x'),
+    ), 0)
 
 
 def unpack_offset(msr_response):
@@ -179,10 +175,11 @@ def set_offset(plane, mV):
     write_value = pack_offset(plane_index, target)
     write_msr(write_value)
     # now check value set correctly
-    read = format(read_msr(), '08x')
-    if read != target:
+    want_mv = unconvert_offset(target)
+    read_mv = read_offset(plane)
+    if want_mv != read_mv:
         logging.error("Failed to set {p}: expected {t}, read {r}".format(
-            p=plane, t=target, r=read))
+            p=plane, t=hex(target), r=hex(read)))
         raise SystemExit(1)
 
 
