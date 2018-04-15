@@ -182,7 +182,7 @@ def set_offset(plane, mV):
     read = format(read_msr(), '08x')
     if read != target:
         logging.error("Failed to set {p}: expected {t}, read {r}".format(
-            p=plane, t=target, r=format(read, '08x')))
+            p=plane, t=target, r=read))
         raise SystemExit(1)
 
 
