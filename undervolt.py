@@ -191,12 +191,6 @@ def main():
 
     if not glob('/dev/cpu/*/msr'):
         subprocess.check_call(['modprobe', 'msr'])
-    if args.read:
-        for plane in PLANES:
-            msr_value = read_offset(plane)
-            voltage = unconvert_offset(msr_value)
-            print('{plane}: {voltage} mV'.format(
-                plane=plane, voltage=round(voltage, 2)))
 
     # for each arg, try to set voltage
     for plane in PLANES:
@@ -224,7 +218,12 @@ def main():
                 command += ' --{plane} {offset}'.format(plane=plane, offset=offset)
         print(command)
 
-
+    if args.read:
+        for plane in PLANES:
+            msr_value = read_offset(plane)
+            voltage = unconvert_offset(msr_value)
+            print('{plane}: {voltage} mV'.format(
+                plane=plane, voltage=round(voltage, 2)))
 
 if __name__ == '__main__':
     main()
