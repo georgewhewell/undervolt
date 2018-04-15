@@ -90,6 +90,7 @@ Lenovo X1 Yoga Gen 2  i7-7600U  Yes
 Dell Xps 15 9550      i7-6700HQ Yes
 Dell Xps 15 9560      i7-7700HQ Yes
 Lenovo Thinkpad T470p i7-7700HQ Yes
+MacBook Air Mid 2013  i5-4250u  Yes
 ===================== ========= ==========
 
 Credit
