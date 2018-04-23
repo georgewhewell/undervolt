@@ -7,6 +7,7 @@ Tool for undervolting Intel CPUs under Linux
 import argparse
 import logging
 import os
+import sys
 from glob import glob
 from struct import pack, unpack
 import subprocess
@@ -198,7 +199,11 @@ def main():
     for plane in PLANES:
         parser.add_argument('--{}'.format(plane), type=int, help="offset (mV)")
 
-    # parse args
+    # print help if called with no args
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(1)
+
     args = parser.parse_args()
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
