@@ -34,8 +34,7 @@ def write_msr(val, msr=0x150):
     """
     n = glob('/dev/cpu/[0-9]*/msr')
     for c in n:
-        logging.info("Writing {val} to {msr}".format(
-            val=hex(val), msr=c))
+        logging.info("Writing {val} to {msr}".format(val=hex(val), msr=c))
         f = os.open(c, os.O_WRONLY)
         os.lseek(f, msr, os.SEEK_SET)
         os.write(f, pack('Q', val))
@@ -51,7 +50,7 @@ def read_msr(msr=0x150, cpu=0):
     n = '/dev/cpu/%d/msr' % (cpu,)
     f = os.open(n, os.O_RDONLY)
     os.lseek(f, msr, os.SEEK_SET)
-    val = unpack('Q', os.read(f, 8))[0]
+    val, = unpack('Q', os.read(f, 8))
     logging.info("Read {val} from {n}".format(val=hex(val), n=n))
     os.close(f)
     return val
@@ -132,11 +131,8 @@ def pack_offset(plane_index, offset=None):
     '8000011000000000'
 
     """
-    return int("0x80000{plane}1{write}{offset}".format(
-        plane=plane_index,
-        write=int(offset is not None),
-        offset=format(offset or 0, '08x'),
-    ), 0)
+    return ((1 << 63) | (plane_index << 40) | (1 << 36) |
+        ((offset is not None) << 32) | (offset or 0))
 
 
 def unpack_offset(msr_response):
