@@ -12,7 +12,8 @@ undervolt |travis|
 
 *undervolt* is a program for undervolting Intel CPUs under Linux. It works in
 a similar manner to the Windows program *ThrottleStop* (i.e, `MSR 0x150`). You
-can apply a fixed voltage offset to one of 5 voltage planes.
+can apply a fixed voltage offset to one of 5 voltage planes, and override your
+systems temperature target (CPU will throttle when this temperature is reached).
 
 For more information, read
 `here <https://github.com/mihic/linux-intel-undervolt>`_.
@@ -34,6 +35,7 @@ Examples
 Read current offsets::
 
     $ undervolt --read
+    temperature target: -0 (100C)
     core: 0.0 mV
     gpu: -19.53 mV
     cache: -30.27 mV
@@ -48,6 +50,10 @@ Apply -75mV offset to GPU, -100mV to all other planes::
 
     $ undervolt --gpu -75 --core -100 --cache -100 --uncore -100 --analogio -100
 
+Set temperature target to 97C::
+
+    $ undervolt --temp 97
+
 Generated the command to run to recreate your Throttlestop settings::
 
     $ undervolt --throttlestop ThrottleStop.ini --tsindex 3
@@ -61,14 +67,16 @@ Usage
 .. code-block:: bash
 
     $ undervolt -h
-    usage: undervolt [-h] [-v] [-f] [-r] [--throttlestop THROTTLESTOP]
-                     [--tsindex TSINDEX] [--core CORE] [--gpu GPU] [--cache CACHE]
-                     [--uncore UNCORE] [--analogio ANALOGIO]
+    usage: undervolt.py [-h] [-v] [-f] [-r] [-t TEMP]
+                        [--throttlestop THROTTLESTOP] [--tsindex TSINDEX]
+                        [--core CORE] [--gpu GPU] [--cache CACHE]
+                        [--uncore UNCORE] [--analogio ANALOGIO]
     optional arguments:
       -h, --help            show this help message and exit
       -v, --verbose         print debug info
       -f, --force           allow setting positive offsets
       -r, --read            read existing values
+      -t TEMP, --temp TEMP  set temperature target
       --throttlestop THROTTLESTOP
                             extract values from ThrottleStop
       --tsindex TSINDEX     ThrottleStop profile index

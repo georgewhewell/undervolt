@@ -150,6 +150,14 @@ def unpack_offset(msr_response):
     return unconvert_offset(msr_response ^ (plane_index << 40))
 
 
+def read_temperature():
+    return read_msr(0x1a2) >> 24
+
+
+def set_temperature(temp):
+    write_msr((100 - temp) << 24, msr=0x1a2)
+
+
 def read_offset(plane):
     """
     Write the 'read' value to mailbox, then re-read
@@ -187,6 +195,7 @@ def main():
     parser.add_argument('-f', '--force', action='store_true',
                         help="allow setting positive offsets")
     parser.add_argument('-r', '--read', action="store_true", help="read existing values")
+    parser.add_argument('-t', '--temp', type=int, help="set temperature target")
     parser.add_argument('--throttlestop', type=str,
                         help="extract values from ThrottleStop")
     parser.add_argument('--tsindex', type=int,
@@ -216,8 +225,10 @@ def main():
             raise ValueError("Use --force to set positive offset")
         set_offset(plane, offset)
 
-    throttlestop = getattr(args, 'throttlestop')
+    if args.temp:
+        set_temperature(args.temp)
 
+    throttlestop = getattr(args, 'throttlestop')
     if throttlestop is not None:
         command = 'undervolt'
         tsindex = getattr(args, 'tsindex')
@@ -233,6 +244,10 @@ def main():
         print(command)
 
     if args.read:
+        print('temperature target: -{tjunc} ({temp}C)'.format(
+            tjunc=read_temperature(),
+            temp=100 - read_temperature(),
+        ))
         for plane in PLANES:
             voltage = read_offset(plane)
             print('{plane}: {voltage} mV'.format(
