@@ -223,10 +223,9 @@ def main():
         tsindex = getattr(args, 'tsindex')
         config = configparser.ConfigParser()
         config.read(throttlestop)
-        ts = config['ThrottleStop']
         for plane in PLANES:
-            hex_str = ts['FIVRVoltage{plane}{profile}'.format(
-                plane=PLANES[plane], profile=tsindex)]
+            hex_str = config.get('ThrottleStop', 'FIVRVoltage{plane}{profile}'.format(
+                plane=PLANES[plane], profile=tsindex))
             hex_value = int(hex_str, 16)
             if hex_value != 0:
                 offset = unconvert_offset(hex_value)
