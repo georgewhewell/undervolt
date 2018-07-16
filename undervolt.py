@@ -183,8 +183,8 @@ def set_offset(plane, mV):
     want_mv = unconvert_offset(target)
     read_mv = read_offset(plane)
     if want_mv != read_mv:
-        logging.error("Failed to set {p}: expected {t}, read {r}".format(
-            p=plane, t=hex(target), r=hex(read)))
+        logging.error("Failed to apply {p}: set {t}, read {r}".format(
+            p=plane, t=want_mv, r=read_mv))
         raise SystemExit(1)
 
 
