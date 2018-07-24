@@ -8,6 +8,7 @@ import argparse
 import logging
 import os
 import sys
+import multiprocessing
 from glob import glob
 from struct import pack, unpack
 import subprocess
@@ -32,15 +33,15 @@ def write_msr(val, msr=0x150):
     values from register 0x150.
     Writes to all msr node on all CPUs available.
     """
-    n = glob('/dev/cpu/[0-9]*/msr')
-    for c in n:
+    for i in range(multiprocessing.cpu_count()):
+        c = '/dev/cpu/%d/msr' % i
+        if not os.path.exists(c):
+            raise OSError("msr module not loaded (run modprobe msr)")
         logging.info("Writing {val} to {msr}".format(val=hex(val), msr=c))
         f = os.open(c, os.O_WRONLY)
         os.lseek(f, msr, os.SEEK_SET)
         os.write(f, pack('Q', val))
         os.close(f)
-    if not n:
-        raise OSError("msr module not loaded (run modprobe msr)")
 
 
 def read_msr(msr=0x150, cpu=0):
