@@ -1,6 +1,4 @@
-*Warning!*
-
-*This program is untested (apart from by myself) and it may damage your hardware! Use at your own risk.*
+*Warning! This program is untested (apart from by myself) and it may damage your hardware! Use at your own risk.*
 
 ==================
 undervolt |travis|
@@ -64,7 +62,7 @@ Generated the command to run to recreate your Throttlestop settings::
 Usage
 -----
 
-.. code-block:: bash
+.. code-block::
 
     $ undervolt -h
     usage: undervolt.py [-h] [-v] [-f] [-r] [-t TEMP]
@@ -86,10 +84,58 @@ Usage
       --uncore UNCORE       offset (mV)
       --analogio ANALOGIO   offset (mV)
 
+Running automatically on boot
+-----------------------------
+
+First, create a unit file ``/etc/systemd/system/undervolt.service`` with
+following contents, replacing the arguments with your own offsets::
+
+  [Unit]
+  Description=undervolt
+
+  [Service]
+  Type=oneshot
+  # If you have installed undervolt globally (via sudo pip install):
+  ExecStart=undervolt -v --core -150 --cache -150 --gpu -100
+  # If you want to run from source:
+  # ExecStart=/path/to/undervolt.py -v --core -150 --cache -150 --gpu -100
+
+Check that your script works::
+
+  $ systemctl start undervolt
+
+Then create a timer ``/etc/systemd/system/undervolt.timer`` to trigger the task periodically: ::
+
+  [Unit]
+  Description=Apply undervolt settings
+
+  [Timer]
+  Unit=undervolt.service
+  # Wait 2 minutes after boot before first applying
+  OnBootSec=2min
+  # Run every 30 seconds
+  OnUnitActiveSec=30
+
+  [Install]
+  WantedBy=multi-user.target
+
+Now enable and start the timer::
+
+  $ systemctl enable undervolt.timer
+  $ systemctl start undervolt.timer
+
+By including the *OnBootSec* command, settings will not be immediately applied.
+If you have set overly-aggressive offsets, you will have a short period to
+disable the timer before it crashes your system::
+
+  $ systemctl stop undervolt.timer
+
+Now you can edit your ``undervolt.service`` before re-starting the timer.
+
 Hardware support
 ----------------
 
-Undervolting should work on any CPU later then Haswell.
+Undervolting should work on any CPU later than Haswell.
 
 ===================== ========= ==========
       System             CPU     Working?
@@ -106,7 +152,7 @@ MacBook Air Mid 2013  i5-4250U  Yes
 
 Credit
 ------
-This project is trivial wrapper around the work of others from the following resources:
+This project is a trivial wrapper around the work of others from the following resources:
 
 - https://github.com/mihic/linux-intel-undervolt
 - http://forum.notebookreview.com/threads/undervolting-e-g-skylake-in-linux.807953
