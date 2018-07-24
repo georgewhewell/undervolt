@@ -159,6 +159,13 @@ Troubleshooting
   Cache. A warning message will be displayed if you attempt to set different
   offsets.
 
+- ``OSError: [Errno 1] Operation not permitted``
+  First try running with ``sudo``. If the error persists, your system is
+  probably booted in Secure Boot mode. In this case, the Linux kernel will
+  prevent userspace programs (even as root) from writing to the CPU's
+  model-specific registers. Disable UEFI Secure Boot in your system's BIOS
+  and the error should go away.
+
 Credit
 ------
 This project is a trivial wrapper around the work of others from the following resources:
