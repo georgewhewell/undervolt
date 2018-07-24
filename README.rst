@@ -150,6 +150,15 @@ Dell XPS 15 9570      i9-8950HK Yes
 MacBook Air Mid 2013  i5-4250U  Yes
 ===================== ========= ==========
 
+Troubleshooting
+---------------
+
+- **Core or Cache offsets have no effect.**
+  It is not possible to set different offsets for CPU Core and Cache. The CPU
+  will take the smaller of the two offsets, and apply that to both CPU and
+  Cache. A warning message will be displayed if you attempt to set different
+  offsets.
+
 Credit
 ------
 This project is a trivial wrapper around the work of others from the following resources:

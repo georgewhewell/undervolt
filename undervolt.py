@@ -217,6 +217,12 @@ def main():
     if not glob('/dev/cpu/*/msr'):
         subprocess.check_call(['modprobe', 'msr'])
 
+    if (args.core or args.cache) and args.core != args.cache:
+        logging.warn(
+            "You have supplied different offsets for Core and Cache. "
+            "The smaller of the two (or none if you only supplied one) will be applied to both planes."
+        )
+
     # for each arg, try to set voltage
     for plane in PLANES:
         offset = getattr(args, plane)
