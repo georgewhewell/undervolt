@@ -17,6 +17,8 @@ try:  # Python3
 except ImportError:  # Python2
     import ConfigParser as configparser
 
+AC_STATE_NODE = os.environ.get(
+    'AC_STATE_NODE', '/sys/class/power_supply/AC/online')
 PLANES = {
     'core': 0,
     'gpu': 1,
@@ -189,6 +191,13 @@ def set_offset(plane, mV):
         raise SystemExit(1)
 
 
+def read_ac_state():
+    """
+    Returns True if AC is connected, else False
+    """
+    return open(AC_STATE_NODE).read() == '1\n'
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-v', '--verbose', action='store_true',
@@ -197,6 +206,8 @@ def main():
                         help="allow setting positive offsets")
     parser.add_argument('-r', '--read', action="store_true", help="read existing values")
     parser.add_argument('-t', '--temp', type=int, help="set temperature target")
+    parser.add_argument('--temp-ac', type=int, help="set temperature target on AC power")
+    parser.add_argument('--temp-bat', type=int, help="set temperature target on battery power")
     parser.add_argument('--throttlestop', type=str,
                         help="extract values from ThrottleStop")
     parser.add_argument('--tsindex', type=int,
@@ -232,8 +243,18 @@ def main():
             raise ValueError("Use --force to set positive offset")
         set_offset(plane, offset)
 
+    if args.temp and (args.temp_ac or args.temp_bat):
+        logging.error("Set either --temp or --temp-ac/--temp-bat, not both")
+        sys.exit(1)
+
     if args.temp:
         set_temperature(args.temp)
+
+    if args.temp_ac and read_ac_state():
+        set_temperature(args.temp_ac)
+
+    if args.temp_bat and not read_ac_state():
+        set_temperature(args.temp_bat)
 
     throttlestop = getattr(args, 'throttlestop')
     if throttlestop is not None:
