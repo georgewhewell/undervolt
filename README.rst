@@ -143,6 +143,7 @@ Undervolting should work on any CPU later than Haswell.
 Lenovo Yoga 920       i7-8550U  Yes
 Lenovo X1 Yoga Gen 2  i7-7600U  Yes
 Lenovo Thinkpad T470p i7-7700HQ Yes
+Dell Latitude 7390    i7-8650U  Yes
 Dell XPS 13 9343      i5-5200U  Yes
 Dell XPS 15 9550      i7-6700HQ Yes
 Dell XPS 15 9560      i7-7700HQ Yes
