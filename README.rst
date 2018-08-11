@@ -152,6 +152,7 @@ Dell XPS 15 9550      i7-6700HQ Yes
 Dell XPS 15 9560      i7-7700HQ Yes
 Dell XPS 15 9570      i9-8950HK Yes
 Dell XPS 15 9575      i7-8705G  Yes
+HP Spectre X360       i7-8809G  Yes
 MacBook Air Mid 2013  i5-4250U  Yes
 ===================== ========= ==========
 
