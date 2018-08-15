@@ -154,7 +154,7 @@ def unpack_offset(msr_response):
 
 
 def read_temperature():
-    return read_msr(0x1a2) >> 24
+    return (read_msr(0x1a2) & (127 << 24)) >> 24
 
 
 def set_temperature(temp):
