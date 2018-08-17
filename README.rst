@@ -141,9 +141,10 @@ Hardware support
 Undervolting should work on any CPU later than Haswell.
 
 ===================== ========= ==========
-      System             CPU     Working?
+      System             CPU     Working? 
 ===================== ========= ==========
 Lenovo Yoga 920       i7-8550U  Yes
+Lenovo X1 Gen 5       i7-7500U  Yes
 Lenovo X1 Yoga Gen 2  i7-7600U  Yes
 Lenovo Thinkpad T470p i7-7700HQ Yes
 Dell Latitude 7390    i7-8650U  Yes
