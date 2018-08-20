@@ -154,7 +154,7 @@ def unpack_offset(msr_response):
 
 
 def read_temperature():
-    return read_msr(0x1a2) >> 24
+    return (read_msr(0x1a2) & (127 << 24)) >> 24
 
 
 def set_temperature(temp):
@@ -205,8 +205,7 @@ def main():
     parser.add_argument('-f', '--force', action='store_true',
                         help="allow setting positive offsets")
     parser.add_argument('-r', '--read', action="store_true", help="read existing values")
-    parser.add_argument('-t', '--temp', type=int, help="set temperature target")
-    parser.add_argument('--temp-ac', type=int, help="set temperature target on AC power")
+    parser.add_argument('-t', '--temp', type=int, help="set temperature target on AC (and battery power if --temp-bat is not used)")
     parser.add_argument('--temp-bat', type=int, help="set temperature target on battery power")
     parser.add_argument('--throttlestop', type=str,
                         help="extract values from ThrottleStop")
@@ -243,15 +242,11 @@ def main():
             raise ValueError("Use --force to set positive offset")
         set_offset(plane, offset)
 
-    if args.temp and (args.temp_ac or args.temp_bat):
-        logging.error("Set either --temp or --temp-ac/--temp-bat, not both")
-        sys.exit(1)
-
-    if args.temp:
+    if args.temp and not args.temp_bat:
         set_temperature(args.temp)
 
-    if args.temp_ac and read_ac_state():
-        set_temperature(args.temp_ac)
+    if args.temp and read_ac_state():
+        set_temperature(args.temp)
 
     if args.temp_bat and not read_ac_state():
         set_temperature(args.temp_bat)
