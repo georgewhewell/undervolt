@@ -156,6 +156,7 @@ Dell XPS 15 9575      i7-8705G  Yes
 HP Spectre X360       i7-8809G  Yes
 HP Zbook Studio G5    i7-8750H  Yes
 MacBook Air Mid 2013  i5-4250U  Yes
+Acer Nitro 5          i5-7300HQ Yes
 ===================== ========= ==========
 
 Troubleshooting
