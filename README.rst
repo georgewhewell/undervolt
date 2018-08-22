@@ -65,7 +65,7 @@ Usage
 .. code-block::
 
     $ undervolt -h
-    usage: undervolt.py [-h] [-v] [-f] [-r] [-t TEMP] [--temp-ac TEMP_AC]
+    usage: undervolt.py [-h] [-v] [-f] [-r] [-t TEMP]
                         [--temp-bat TEMP_BAT] [--throttlestop THROTTLESTOP]
                         [--tsindex TSINDEX] [--core CORE] [--gpu GPU]
                         [--cache CACHE] [--uncore UNCORE] [--analogio ANALOGIO]
@@ -75,8 +75,7 @@ Usage
       -v, --verbose         print debug info
       -f, --force           allow setting positive offsets
       -r, --read            read existing values
-      -t TEMP, --temp TEMP  set temperature target
-      --temp-ac TEMP_AC     set temperature target on AC power
+      -t TEMP, --temp TEMP  set temperature target on AC (and battery power if --temp-bat is not used)
       --temp-bat TEMP_BAT   set temperature target on battery power
       --throttlestop THROTTLESTOP
                             extract values from ThrottleStop
