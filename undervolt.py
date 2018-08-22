@@ -242,7 +242,7 @@ def main():
             raise ValueError("Use --force to set positive offset")
         set_offset(plane, offset)
 
-    if (args.temp and read_ac_state) or (args.temp and not args.temp_bat):
+    if (args.temp and read_ac_state()) or (args.temp and not args.temp_bat):
         set_temperature(args.temp)
 
     if args.temp_bat and not read_ac_state():
