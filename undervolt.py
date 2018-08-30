@@ -19,7 +19,7 @@ except ImportError:  # Python2
     import ConfigParser as configparser
 
 AC_STATE_NODE = os.environ.get(
-    'AC_STATE_NODE', glob('/sys/class/power_supply/AC*/online')[0])
+    'AC_STATE_NODE', (glob('/sys/class/power_supply/AC*/online') + [None])[0])
 PLANES = {
     'core': 0,
     'gpu': 1,
@@ -196,7 +196,10 @@ def read_ac_state():
     """
     Returns True if AC is connected, else False
     """
-    return open(AC_STATE_NODE).read() == '1\n'
+    if AC_STATE_NODE:
+        return open(AC_STATE_NODE).read() == '1\n'
+    # Assume no battery if the /sys entry is missing.
+    return True
 
 
 def main():
