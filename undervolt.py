@@ -12,13 +12,14 @@ import multiprocessing
 from glob import glob
 from struct import pack, unpack
 import subprocess
+from glob import glob
 try:  # Python3
     import configparser
 except ImportError:  # Python2
     import ConfigParser as configparser
 
 AC_STATE_NODE = os.environ.get(
-    'AC_STATE_NODE', '/sys/class/power_supply/AC/online')
+    'AC_STATE_NODE', glob('/sys/class/power_supply/AC*/online')[0])
 PLANES = {
     'core': 0,
     'gpu': 1,
