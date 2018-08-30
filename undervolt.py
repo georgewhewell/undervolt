@@ -172,7 +172,7 @@ def read_offset(plane):
 
 
 def set_offset(plane, mV):
-    """"
+    """
     Set given voltage plane to offset mV
     Raises SystemExit if re-reading value returns something different
     """
