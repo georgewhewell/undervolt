@@ -12,7 +12,6 @@ import multiprocessing
 from glob import glob
 from struct import pack, unpack
 import subprocess
-from glob import glob
 try:  # Python3
     import configparser
 except ImportError:  # Python2
