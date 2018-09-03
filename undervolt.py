@@ -22,7 +22,7 @@ AC_STATE_NODE = os.environ.get(
 PLANES = {
     'core': 0,
     'gpu': 1,
-    'cache': 2,
+    # 'cache': 2, must be set to same as core so useless
     'uncore': 3,
     'analogio': 4,
     # 'digitalio': 5, # not working?
@@ -230,10 +230,9 @@ def main():
     if not glob('/dev/cpu/*/msr'):
         subprocess.check_call(['modprobe', 'msr'])
 
-    if (args.core or args.cache) and args.core != args.cache:
+    if args.cache:
         logging.warn(
-            "You have supplied different offsets for Core and Cache. "
-            "The smaller of the two (or none if you only supplied one) will be applied to both planes."
+            "Cache has been removed as it must be set the same as core. To set cache, set an offset for core"
         )
 
     # for each arg, try to set voltage
