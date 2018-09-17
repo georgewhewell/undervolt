@@ -146,6 +146,7 @@ Lenovo Yoga 920       i7-8550U  Yes
 Lenovo X1 Gen 5       i7-7500U  Yes
 Lenovo X1 Yoga Gen 2  i7-7600U  Yes
 Lenovo Thinkpad T470p i7-7700HQ Yes
+Lenovo Thinkpad x250  i7-5600U  Yes
 Dell Latitude 5480    i5-6300U  Yes
 Dell Latitude 7390    i7-8650U  Yes
 Dell Precision M3800  i7-4712HQ Yes
