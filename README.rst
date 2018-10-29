@@ -160,6 +160,8 @@ HP Spectre X360       i7-8809G  Yes
 HP Zbook Studio G5    i7-8750H  Yes
 MacBook Air Mid 2013  i5-4250U  Yes
 Acer Nitro 5          i5-7300HQ Yes
+Toshiba Chromebook 2  N2840     No
+Lenovo Thinkpad T430  i7-3610QM No
 ===================== ========= ==========
 
 Troubleshooting
