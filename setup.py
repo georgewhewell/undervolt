@@ -4,6 +4,8 @@ from os.path import dirname, join
 from setuptools import setup
 import doctest
 
+import undervolt
+
 
 def test_suite():
     return doctest.DocTestSuite('undervolt')
@@ -11,7 +13,7 @@ def test_suite():
 
 setup(
     name='undervolt',
-    version='0.2.9',
+    version=undervolt.__version__,
     description='Undervolt Intel CPUs under Linux',
     long_description=open(
         join(dirname(__file__), 'README.rst')).read(),
