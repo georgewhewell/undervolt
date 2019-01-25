@@ -17,6 +17,8 @@ try:  # Python3
 except ImportError:  # Python2
     import ConfigParser as configparser
 
+__version__ = '0.2.9'
+
 AC_STATE_NODE = os.environ.get(
     'AC_STATE_NODE', (glob('/sys/class/power_supply/AC*/online') + [None])[0])
 PLANES = {
@@ -203,6 +205,7 @@ def read_ac_state():
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=__version__))
     parser.add_argument('-v', '--verbose', action='store_true',
                         help="print debug info")
     parser.add_argument('-f', '--force', action='store_true',
