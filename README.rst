@@ -139,30 +139,31 @@ Hardware support
 
 Undervolting should work on any CPU later than Haswell.
 
-===================== ========= ==========
-      System             CPU     Working? 
-===================== ========= ==========
-Lenovo Yoga 920       i7-8550U  Yes
-Lenovo X1 Gen 5       i7-7500U  Yes
-Lenovo X1 Yoga Gen 2  i7-7600U  Yes
-Lenovo Thinkpad T470p i7-7700HQ Yes
-Lenovo Thinkpad x250  i7-5600U  Yes
-Dell Latitude 5480    i5-6300U  Yes
-Dell Latitude 7390    i7-8650U  Yes
-Dell Precision M3800  i7-4712HQ Yes
-Dell XPS 13 9343      i5-5200U  Yes
-Dell XPS 15 9530      i7-4712HQ Yes
-Dell XPS 15 9550      i7-6700HQ Yes
-Dell XPS 15 9560      i7-7700HQ Yes
-Dell XPS 15 9570      i9-8950HK Yes
-Dell XPS 15 9575      i7-8705G  Yes
-HP Spectre X360       i7-8809G  Yes
-HP Zbook Studio G5    i7-8750H  Yes
-MacBook Air Mid 2013  i5-4250U  Yes
-Acer Nitro 5          i5-7300HQ Yes
-Toshiba Chromebook 2  N2840     No
-Lenovo Thinkpad T430  i7-3610QM No
-===================== ========= ==========
+======================== ========= ==========
+      System                CPU     Working? 
+======================== ========= ==========
+Acer Aspire 7 (A715-71G) i5-7300HQ Yes
+Acer Nitro 5             i5-7300HQ Yes
+Dell Latitude 5480       i5-6300U  Yes
+Dell Latitude 7390       i7-8650U  Yes
+Dell Precision M3800     i7-4712HQ Yes
+Dell XPS 13 9343         i5-5200U  Yes
+Dell XPS 15 9530         i7-4712HQ Yes
+Dell XPS 15 9550         i7-6700HQ Yes
+Dell XPS 15 9560         i7-7700HQ Yes
+Dell XPS 15 9570         i9-8950HK Yes
+Dell XPS 15 9575         i7-8705G  Yes
+HP Spectre X360          i7-8809G  Yes
+HP Zbook Studio G5       i7-8750H  Yes
+Lenovo Thinkpad T470p    i7-7700HQ Yes
+Lenovo Thinkpad x250     i7-5600U  Yes
+Lenovo X1 Gen 5          i7-7500U  Yes
+Lenovo X1 Yoga Gen 2     i7-7600U  Yes
+Lenovo Yoga 920          i7-8550U  Yes
+MacBook Air Mid 2013     i5-4250U  Yes
+Lenovo Thinkpad T430     i7-3610QM No
+Toshiba Chromebook 2     N2840     No
+======================== ========= ==========
 
 Troubleshooting
 ---------------
