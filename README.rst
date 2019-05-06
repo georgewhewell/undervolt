@@ -143,7 +143,7 @@ First, create a directory for the service::
 
 Then create a file named "run" in that directory and edit it to contain these contents::
 
-  #!/bin/bash
+  #!/bin/sh
   undervolt --core -85 --uncore -85 --analogio -85 --cache -85 --gpu -85
 
 Replace the offsets with your own. Then mark the file as executable::
