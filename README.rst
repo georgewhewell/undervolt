@@ -86,8 +86,8 @@ Usage
       --uncore UNCORE       offset (mV)
       --analogio ANALOGIO   offset (mV)
 
-Running automatically on boot
------------------------------
+Running automatically on boot (systemd)
+---------------------------------------
 
 First, create a unit file ``/etc/systemd/system/undervolt.service`` with
 following contents, replacing the arguments with your own offsets::
@@ -133,6 +133,27 @@ disable the timer before it crashes your system::
   $ systemctl stop undervolt.timer
 
 Now you can edit your ``undervolt.service`` before re-starting the timer.
+
+Running automatically on boot (runit)
+-------------------------------------
+
+First, create a directory for the service::
+
+  $ sudo mkdir -p /etc/sv/undervolt
+
+Then create a file named "run" in that directory and edit it to contain these contents::
+
+  #!/bin/sh
+  undervolt --core -85 --uncore -85 --analogio -85 --cache -85 --gpu -85
+  sleep 60
+
+Replace the offsets with your own. Then mark the file as executable::
+
+  $ sudo chmod a+x /etc/sv/undervolt/run
+
+Then enable the service::
+
+  $ sudo ln -s /etc/sv/undervolt /var/services/
 
 Hardware support
 ----------------
