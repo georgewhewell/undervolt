@@ -206,7 +206,7 @@ Troubleshooting
 
 GUI
 ----------------
-There is also a small gui written in Java avaiable [HERE](https://github.com/zmalrobot/JavaLinuxUndervolt) 
+There is also a small gui written in Java avaiable here: https://github.com/zmalrobot/JavaLinuxUndervolt
 
 It will allow you to set each value core, gpu, cache, uncore, analogio (temperature target isn't implemented yet),save a profile, load a profile and reset the value.
 
