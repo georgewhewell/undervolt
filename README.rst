@@ -186,9 +186,9 @@ MacBook Air Mid 2013     i5-4250U  Yes
 Lenovo Thinkpad T430     i7-3610QM No
 Toshiba Chromebook 2     N2840     No
 ======================== ========= ==========
-
+​
+190
 Troubleshooting
----------------
 
 - **Core or Cache offsets have no effect.**
   It is not possible to set different offsets for CPU Core and Cache. The CPU
@@ -202,6 +202,14 @@ Troubleshooting
   prevent userspace programs (even as root) from writing to the CPU's
   model-specific registers. Disable UEFI Secure Boot in your system's BIOS
   and the error should go away.
+
+
+GUI
+----------------
+There is also a small gui written in Java avaiable [HERE](https://github.com/zmalrobot/JavaLinuxUndervolt) 
+
+It will allow you to set each value core, gpu, cache, uncore, analogio (temperature target isn't implemented yet),save a profile, load a profile and reset the value.
+
 
 Credit
 ------
