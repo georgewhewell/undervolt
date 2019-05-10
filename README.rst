@@ -185,6 +185,7 @@ Lenovo Yoga 920          i7-8550U  Yes
 MacBook Air Mid 2013     i5-4250U  Yes
 Lenovo Thinkpad T430     i7-3610QM No
 Toshiba Chromebook 2     N2840     No
+Asus fx504Ge             i7-8750h  Yes
 ======================== ========= ==========
 
 Troubleshooting
