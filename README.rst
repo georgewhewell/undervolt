@@ -185,6 +185,7 @@ Lenovo Yoga 920          i7-8550U  Yes
 MacBook Air Mid 2013     i5-4250U  Yes
 Lenovo Thinkpad T430     i7-3610QM No
 Toshiba Chromebook 2     N2840     No
+Asus FX504GE             i7-8750h  Yes
 ======================== ========= ==========
 
 Troubleshooting
@@ -202,6 +203,14 @@ Troubleshooting
   prevent userspace programs (even as root) from writing to the CPU's
   model-specific registers. Disable UEFI Secure Boot in your system's BIOS
   and the error should go away.
+
+
+GUI
+----------------
+There is also a small gui written in Java avaiable here: https://github.com/zmalrobot/JavaLinuxUndervolt
+
+It will allow you to set each value core, gpu, cache, uncore, analogio (temperature target isn't implemented yet),save a profile, load a profile and reset the value.
+
 
 Credit
 ------
