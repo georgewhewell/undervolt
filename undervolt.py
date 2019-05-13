@@ -16,8 +16,7 @@ try:  # Python3
     import configparser
 except ImportError:  # Python2
     import ConfigParser as configparser
-
-__version__ = '0.2.9'
+__version__ = '0.2.10'
 
 AC_STATE_NODE = os.environ.get(
     'AC_STATE_NODE', (glob('/sys/class/power_supply/AC*/online') + [None])[0])
@@ -29,6 +28,13 @@ PLANES = {
     'analogio': 4,
     # 'digitalio': 5, # not working?
 }
+
+# 0.2.9 removed --temp-ac flag without warning
+# accept it for now and show deprecation
+# remove in 0.3
+if any('temp-ac' in arg for arg in sys.argv):
+    logging.warning("Got deprecated flag --temp-ac, assuming --temp")
+    sys.argv = [arg.replace('temp-ac', 'temp') for arg in sys.argv]
 
 
 def write_msr(val, msr=0x150):
