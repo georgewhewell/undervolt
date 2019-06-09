@@ -184,6 +184,7 @@ Lenovo X1 Gen 5          i7-7500U  Yes
 Lenovo X1 Yoga Gen 2     i7-7600U  Yes
 Lenovo Yoga 920          i7-8550U  Yes
 MacBook Air Mid 2013     i5-4250U  Yes
+MacBook Air Late 2015    i5-5250U  Yes
 Lenovo Thinkpad T430     i7-3610QM No
 Toshiba Chromebook 2     N2840     No
 Asus FX504GE             i7-8750h  Yes
