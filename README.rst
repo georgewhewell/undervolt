@@ -183,6 +183,7 @@ HP Spectre X360              i7-8809G  Yes
 HP Zbook Studio G5           i7-8750H  Yes
 Lenovo Thinkpad T470p        i7-7700HQ Yes
 Lenovo Thinkpad x250         i7-5600U  Yes
+Lenovo Thinkpad X1 Carbon    i7-6600U  Yes
 Lenovo ThinkPad X1 Extreme   i7-8750H  Yes
 Lenovo X1 Gen 5              i7-7500U  Yes
 Lenovo X1 Yoga Gen 2         i7-7600U  Yes
