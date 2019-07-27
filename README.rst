@@ -98,7 +98,7 @@ following contents, replacing the arguments with your own offsets::
   [Service]
   Type=oneshot
   # If you have installed undervolt globally (via sudo pip install):
-  ExecStart=undervolt -v --core -150 --cache -150 --gpu -100
+  ExecStart=/usr/local/bin/undervolt -v --core -150 --cache -150 --gpu -100
   # If you want to run from source:
   # ExecStart=/path/to/undervolt.py -v --core -150 --cache -150 --gpu -100
 
