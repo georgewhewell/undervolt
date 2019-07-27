@@ -180,6 +180,7 @@ Dell XPS 15 9550             i7-6700HQ Yes
 Dell XPS 15 9560             i7-7700HQ Yes
 Dell XPS 15 9570             i9-8950HK Yes
 Dell XPS 15 9575             i7-8705G  Yes
+Dell XPS 15 7590             i9-9980HK Yes
 HP Spectre X360              i7-8809G  Yes
 HP Zbook Studio G5           i7-8750H  Yes
 Lenovo Thinkpad T470p        i7-7700HQ Yes
