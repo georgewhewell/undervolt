@@ -173,6 +173,7 @@ Dell Precision 5530          i9-8950HK Yes
 Dell Precision M3800         i7-4712HQ Yes
 Dell Precision 7530          i9-8950HK Yes
 Dell Precision 7730          E-2176M   Yes
+Dell Precision 7740          E-2286M   Yes
 Dell XPS 13 9343             i5-5200U  Yes
 Dell XPS 13 9360             i7-7560U  Yes
 Dell XPS 15 9530             i7-4712HQ Yes
