@@ -167,6 +167,7 @@ Acer Aspire 7 (A715-71G)     i5-7300HQ Yes
 Acer Nitro 5                 i5-7300HQ Yes
 Asus FX504GE                 i7-8750H  Yes
 Dell G5                      i7-8750H  Yes
+Dell Latitude 5400           i7-8665U  Yes
 Dell Latitude 5480           i5-6300U  Yes
 Dell Latitude 7390           i7-8650U  Yes
 Dell Precision 5530          i9-8950HK Yes
