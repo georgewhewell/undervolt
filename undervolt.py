@@ -37,13 +37,25 @@ if any('temp-ac' in arg for arg in sys.argv):
     sys.argv = [arg.replace('temp-ac', 'temp') for arg in sys.argv]
 
 
+def cpu_count():
+    """
+    Use 'lscpu' to get CPU count (takes into account hyperthreading)
+    """
+    lscpu = os.popen('lscpu').readlines()
+    for line in lscpu:
+        if line.startswith('NUMA node0'):
+            cpus = line.split(':')[1].strip(' \n').split(',')
+    for i in range(len(cpus)):
+        cpus[i] = int(cpus[i])
+    return cpus
+
 def write_msr(val, msr=0x150):
     """
     Use /dev/cpu/*/msr interface provided by msr module to read/write
     values from register 0x150.
     Writes to all msr node on all CPUs available.
     """
-    for i in range(multiprocessing.cpu_count()):
+    for i in cpu_count():
         c = '/dev/cpu/%d/msr' % i
         if not os.path.exists(c):
             raise OSError("msr module not loaded (run modprobe msr)")
