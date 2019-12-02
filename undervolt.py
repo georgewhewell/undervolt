@@ -37,16 +37,18 @@ if any('temp-ac' in arg for arg in sys.argv):
     sys.argv = [arg.replace('temp-ac', 'temp') for arg in sys.argv]
 
 
-def cpu_count():
+def valid_cpus():
     """
-    Use 'lscpu' to get CPU count (takes into account hyperthreading)
+    Get max processor index from multiprocess.count(), then check which
+    values are valid under /dev/cpu/
     """
-    lscpu = os.popen('lscpu').readlines()
-    for line in lscpu:
-        if line.startswith('NUMA node0'):
-            cpus = line.split(':')[1].strip(' \n').split(',')
-    for i in range(len(cpus)):
-        cpus[i] = int(cpus[i])
+
+    cpus = []
+    max_cpus = multiprocessing.cpu_count()
+    for i in range(max_cpus):
+        if os.path.isdir("/dev/cpu/%d" % i):
+            cpus.append(i)
+
     return cpus
 
 def write_msr(val, msr=0x150):
@@ -55,7 +57,7 @@ def write_msr(val, msr=0x150):
     values from register 0x150.
     Writes to all msr node on all CPUs available.
     """
-    for i in cpu_count():
+    for i in valid_cpus():
         c = '/dev/cpu/%d/msr' % i
         if not os.path.exists(c):
             raise OSError("msr module not loaded (run modprobe msr)")
