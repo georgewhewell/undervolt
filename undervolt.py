@@ -206,7 +206,7 @@ def set_offset(plane, mV, msr):
     write_msr(write_value, msr.addr_voltage_offsets)
     # now check value set correctly
     want_mv = unconvert_offset(target)
-    read_mv = read_offset(plane, msr.addr_voltage_offsets)
+    read_mv = read_offset(plane, msr)
     if want_mv != read_mv:
         logging.error("Failed to apply {p}: set {t}, read {r}".format(
             p=plane, t=want_mv, r=read_mv))
