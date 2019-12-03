@@ -7,8 +7,10 @@ Tool for undervolting Intel CPUs under Linux
 import argparse
 import logging
 import os
+import re
 import sys
 import multiprocessing
+from collections import namedtuple
 from glob import glob
 from struct import pack, unpack
 import subprocess
@@ -16,6 +18,13 @@ try:  # Python3
     import configparser
 except ImportError:  # Python2
     import ConfigParser as configparser
+
+try: # Python >=3.3
+    from math import log2
+except ImportError:
+    from math import log
+    def log2(x):
+        return log(x, 2)
 __version__ = '0.2.10'
 
 AC_STATE_NODE = os.environ.get(
@@ -29,6 +38,11 @@ PLANES = {
     # 'digitalio': 5, # not working?
 }
 
+MSR = namedtuple('MSR', ['addr_voltage_offsets', 'addr_units', 'addr_power_limits', 'addr_temp'])
+ADDRESSES = {
+    '*': MSR(0x150, 0x606, 0x610, 0x1a2) # Default (Core iX 6th, 7th, 8th, 9th gen etc.)
+}
+
 # 0.2.9 removed --temp-ac flag without warning
 # accept it for now and show deprecation
 # remove in 0.3
@@ -37,10 +51,10 @@ if any('temp-ac' in arg for arg in sys.argv):
     sys.argv = [arg.replace('temp-ac', 'temp') for arg in sys.argv]
 
 
-def write_msr(val, msr=0x150):
+def write_msr(val, addr):
     """
     Use /dev/cpu/*/msr interface provided by msr module to read/write
-    values from register 0x150.
+    values from register addr.
     Writes to all msr node on all CPUs available.
     """
     for i in range(multiprocessing.cpu_count()):
@@ -49,18 +63,18 @@ def write_msr(val, msr=0x150):
             raise OSError("msr module not loaded (run modprobe msr)")
         logging.info("Writing {val} to {msr}".format(val=hex(val), msr=c))
         f = os.open(c, os.O_WRONLY)
-        os.lseek(f, msr, os.SEEK_SET)
+        os.lseek(f, addr, os.SEEK_SET)
         os.write(f, pack('Q', val))
         os.close(f)
 
 
-def read_msr(msr=0x150, cpu=0):
+def read_msr(addr, cpu=0):
     """
     Read a value from single msr node on given CPU (defaults to first)
     """
     n = '/dev/cpu/%d/msr' % (cpu,)
     f = os.open(n, os.O_RDONLY)
-    os.lseek(f, msr, os.SEEK_SET)
+    os.lseek(f, addr, os.SEEK_SET)
     val, = unpack('Q', os.read(f, 8))
     logging.info("Read {val} from {n}".format(val=hex(val), n=n))
     os.close(f)
@@ -161,25 +175,25 @@ def unpack_offset(msr_response):
     return unconvert_offset(msr_response ^ (plane_index << 40))
 
 
-def read_temperature():
-    return (read_msr(0x1a2) & (127 << 24)) >> 24
+def read_temperature(msr):
+    return (read_msr(msr.addr_temp) & (127 << 24)) >> 24
 
 
-def set_temperature(temp):
-    write_msr((100 - temp) << 24, msr=0x1a2)
+def set_temperature(temp, msr):
+    write_msr((100 - temp) << 24, addr=msr.addr_temp)
 
 
-def read_offset(plane):
+def read_offset(plane, msr):
     """
     Write the 'read' value to mailbox, then re-read
     """
     plane_index = PLANES[plane]
     value_to_write = pack_offset(plane_index)
-    write_msr(value_to_write)
-    return unpack_offset(read_msr())
+    write_msr(value_to_write, msr.addr_voltage_offsets)
+    return unpack_offset(read_msr(msr.addr_voltage_offsets))
 
 
-def set_offset(plane, mV):
+def set_offset(plane, mV, msr):
     """
     Set given voltage plane to offset mV
     Raises SystemExit if re-reading value returns something different
@@ -189,14 +203,128 @@ def set_offset(plane, mV):
         plane=plane, mV=mV))
     target = convert_offset(mV)
     write_value = pack_offset(plane_index, target)
-    write_msr(write_value)
+    write_msr(write_value, msr.addr_voltage_offsets)
     # now check value set correctly
     want_mv = unconvert_offset(target)
-    read_mv = read_offset(plane)
+    read_mv = read_offset(plane, msr.addr_voltage_offsets)
     if want_mv != read_mv:
         logging.error("Failed to apply {p}: set {t}, read {r}".format(
             p=plane, t=want_mv, r=read_mv))
         raise SystemExit(1)
+
+
+class PowerLimit:
+    short_term_enabled=None
+    short_term_power=None
+    short_term_time=None
+    long_term_enabled=None
+    long_term_power=None
+    long_term_time=None
+    locked=False
+    backup_rest=None  # Backup of the bits that are not written
+
+
+# Author: Stefan Fabian
+# Use at your own risk!
+def read_power_limit(msr):
+    def to_seconds(val, unit):
+        return 2**(val & 0x1f) * (1 + ((val >> 5) & 0x3) / 4.0) / unit
+    units = read_msr(msr.addr_units)
+    val = read_msr(msr.addr_power_limits)
+    power_unit = round(2**(units & 0xf))
+    time_unit = round(2**((units >> 16) & 0xf))
+    result = PowerLimit()
+    result.short_term_enabled = bool((val >> 47) & 0x1)
+    result.short_term_power = ((val >> 32) & 0x7fff) / power_unit
+    result.short_term_time = to_seconds(val >> 49, time_unit)
+    result.long_term_enabled = bool((val >> 15) & 0x1)
+    result.long_term_power = (val & 0x7fff) / power_unit
+    result.long_term_time = to_seconds(val >> 17, time_unit)
+    result.locked = bool((val >> 63) & 1)
+    result.backup_rest = val & 0x7f010000ff010000
+    return result
+
+# Author: Stefan Fabian
+# Use at your own risk!
+def set_power_limit(power_limit, msr):
+    def from_seconds(val, unit):
+        # The formula 2^x*(1+y/4) has two variables and has to be solved analytically
+        # y is 2 bytes, hence we only need to check 4 values
+        val = val * unit
+        if log2(val / 1.75) >= 0x1f:
+            return 0xfe
+        min_err = 1E9
+        result = 0
+        for y in range(4):
+            multiplier = (1 + y / 4.0)
+            val_mult = val / multiplier
+            exp = log2(val_mult)
+            exp_int = int(exp)
+            # Due to the logarithm, we can't just round but have to check which one is closer to 2**exp
+            if val_mult - 2**exp_int >= 2**(exp_int + 1) - val_mult:
+                exp_int += 1
+            if exp_int > 0x1f:
+                exp_int = 0x1f
+            back_val = 2**exp_int * multiplier
+            if abs(back_val - val) < min_err:
+                min_err = abs(back_val - val)
+                result = int(y) << 5 | int(exp_int)
+        return result
+    old_limit = read_power_limit(msr)
+    if old_limit.locked:
+        logging.error("Can not write power limit because it is locked!")
+        raise SystemExit(1)
+    units = read_msr(msr.addr_units)
+    power_unit = round(2**(units & 0xf))
+    time_unit = round(2**((units >> 16) & 0xf))
+
+    write_value = old_limit.backup_rest
+    # short term enabled
+    if power_limit.short_term_enabled is None:
+        power_limit.short_term_enabled = old_limit.short_term_enabled
+    write_value |= (1 if power_limit.short_term_enabled else 0) << 47
+    # short term power
+    if power_limit.short_term_power is None:
+        power_limit.short_term_power = old_limit.short_term_power
+    short_term_power = int(power_limit.short_term_power * power_unit)
+    if short_term_power < 0 or short_term_power > 0x7fff:
+        logging.error("Short term power out of range ({} > 0x7fff)!".format(short_term_power))
+        raise SystemExit(1)
+    write_value |= short_term_power << 32
+    # short term time
+    if power_limit.short_term_time is None:
+        power_limit.short_term_time = old_limit.short_term_time
+    short_term_time = from_seconds(power_limit.short_term_time, time_unit)
+    write_value |= short_term_time << 49
+    # long term enabled
+    if power_limit.long_term_enabled is None:
+        power_limit.long_term_enabled = old_limit.long_term_enabled
+    write_value |= (1 if power_limit.long_term_enabled else 0) << 15
+    # long term power
+    if power_limit.long_term_power is None:
+        power_limit.long_term_power = old_limit.long_term_power
+    long_term_power = int(power_limit.long_term_power * power_unit)
+    if long_term_power < 0 or long_term_power > 0x7fff:
+        logging.error("Long term power out of range ({} > 0x7fff)!".format(long_term_power))
+        raise SystemExit(1)
+    write_value |= long_term_power
+    # long term time
+    if power_limit.long_term_time is None:
+        power_limit.long_term_time = old_limit.long_term_time
+    long_term_time = from_seconds(power_limit.long_term_time, time_unit)
+    write_value |= long_term_time << 17
+    # locked
+    if power_limit.locked is None:
+        power_limit.locked = old_limit.locked
+    write_value |= (1 if power_limit.locked else 0) << 63
+
+    # Write the new power limit
+    write_msr(write_value, msr.addr_power_limits)
+    val = read_msr(msr.addr_power_limits)
+    if val != write_value:
+        logging.error("Failed to apply power limit: Tried to set {}, read {}".format(write_value, val))
+        raise SystemExit(1)
+
 
 
 def read_ac_state():
@@ -223,6 +351,11 @@ def main():
                         help="extract values from ThrottleStop")
     parser.add_argument('--tsindex', type=int,
                         default=0, help="ThrottleStop profile index")
+    parser.add_argument('--cpu', default='*')
+    parser.add_argument('-p1', '--power-limit-long', nargs=2, help="P1 Power Limit (W) and Time Window (s)")
+    parser.add_argument('-p2', '--power-limit-short', nargs=2, help="P2 Power Limit (W) and Time Window (s)")
+    parser.add_argument('--lock-power-limit', action='store_true',
+                        help="Locks the set power limit. Once they are locked, they can not be modified until next RESET (e.g., Reboot).")
 
     for plane in PLANES:
         parser.add_argument('--{}'.format(plane), type=int, help="offset (mV)")
@@ -235,6 +368,11 @@ def main():
     args = parser.parse_args()
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
+    
+    if not args.cpu in ADDRESSES:
+        logging.error("CPU {} not in known addresses!".format(args.cpu))
+        sys.exit(1)
+    msr = ADDRESSES[args.cpu]
 
     if not glob('/dev/cpu/*/msr'):
         subprocess.check_call(['modprobe', 'msr'])
@@ -252,13 +390,27 @@ def main():
             continue
         if offset > 0 and not args.force:
             raise ValueError("Use --force to set positive offset")
-        set_offset(plane, offset)
+        set_offset(plane, offset, msr)
 
     if (args.temp and read_ac_state()) or (args.temp and not args.temp_bat):
-        set_temperature(args.temp)
+        set_temperature(args.temp, msr)
 
     if args.temp_bat and not read_ac_state():
-        set_temperature(args.temp_bat)
+        set_temperature(args.temp_bat, msr)
+
+    power_limit = PowerLimit()
+    if args.power_limit_long:
+        power_limit.long_term_enabled = True
+        power_limit.long_term_power = float(args.power_limit_long[0])
+        power_limit.long_term_time = float(args.power_limit_long[1])
+    if args.power_limit_short:
+        power_limit.short_term_enabled = True
+        power_limit.short_term_power = float(args.power_limit_short[0])
+        power_limit.short_term_time = float(args.power_limit_short[1])
+    if args.lock_power_limit:
+        power_limit.locked = True
+    if power_limit.short_term_enabled is not None or power_limit.long_term_enabled is not None:
+        set_power_limit(power_limit, msr)    
 
     throttlestop = getattr(args, 'throttlestop')
     if throttlestop is not None:
@@ -276,14 +428,25 @@ def main():
         print(command)
 
     if args.read:
+        temp = read_temperature(msr)
         print('temperature target: -{tjunc} ({temp}C)'.format(
-            tjunc=read_temperature(),
-            temp=100 - read_temperature(),
+            tjunc=temp,
+            temp=100 - temp
         ))
         for plane in PLANES:
-            voltage = read_offset(plane)
+            voltage = read_offset(plane, msr)
             print('{plane}: {voltage} mV'.format(
                 plane=plane, voltage=round(voltage, 2)))
+        power_limit = read_power_limit(msr)
+        print('powerlimit: {}W (short: {}s - {}) / {}W (long: {}s - {}){}'.format(
+            power_limit.short_term_power,
+            power_limit.short_term_time,
+            'enabled' if power_limit.short_term_enabled else 'disabled',
+            power_limit.long_term_power,
+            power_limit.long_term_time,
+            'enabled' if power_limit.long_term_enabled else 'disabled',
+            ' [locked]' if power_limit.locked else ''
+        ))
 
 if __name__ == '__main__':
     main()
