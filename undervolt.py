@@ -16,7 +16,7 @@ try:  # Python3
     import configparser
 except ImportError:  # Python2
     import ConfigParser as configparser
-__version__ = '0.2.10'
+__version__ = '0.2.11'
 
 AC_STATE_NODE = os.environ.get(
     'AC_STATE_NODE', (glob('/sys/class/power_supply/AC*/online') + [None])[0])
