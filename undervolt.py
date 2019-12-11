@@ -25,7 +25,7 @@ except ImportError:
     from math import log
     def log2(x):
         return log(x, 2)
-__version__ = '0.2.10'
+__version__ = '0.2.11'
 
 AC_STATE_NODE = os.environ.get(
     'AC_STATE_NODE', (glob('/sys/class/power_supply/AC*/online') + [None])[0])
@@ -51,13 +51,27 @@ if any('temp-ac' in arg for arg in sys.argv):
     sys.argv = [arg.replace('temp-ac', 'temp') for arg in sys.argv]
 
 
+def valid_cpus():
+    """
+    Get max processor index from multiprocess.count(), then check which
+    values are valid under /dev/cpu/
+    """
+
+    cpus = []
+    max_cpus = multiprocessing.cpu_count()
+    for i in range(max_cpus):
+        if os.path.isdir("/dev/cpu/%d" % i):
+            cpus.append(i)
+
+    return cpus
+
 def write_msr(val, addr):
     """
     Use /dev/cpu/*/msr interface provided by msr module to read/write
     values from register addr.
     Writes to all msr node on all CPUs available.
     """
-    for i in range(multiprocessing.cpu_count()):
+    for i in valid_cpus():
         c = '/dev/cpu/%d/msr' % i
         if not os.path.exists(c):
             raise OSError("msr module not loaded (run modprobe msr)")
@@ -352,8 +366,8 @@ def main():
     parser.add_argument('--tsindex', type=int,
                         default=0, help="ThrottleStop profile index")
     parser.add_argument('--cpu', default='*')
-    parser.add_argument('-p1', '--power-limit-long', nargs=2, help="P1 Power Limit (W) and Time Window (s)")
-    parser.add_argument('-p2', '--power-limit-short', nargs=2, help="P2 Power Limit (W) and Time Window (s)")
+    parser.add_argument('-p1', '--power-limit-long', nargs=2, help="P1 Power Limit (W) and Time Window (s)", metavar=('POWER_LIMIT', 'TIME_WINDOW'))
+    parser.add_argument('-p2', '--power-limit-short', nargs=2, help="P2 Power Limit (W) and Time Window (s)", metavar=('POWER_LIMIT', 'TIME_WINDOW'))
     parser.add_argument('--lock-power-limit', action='store_true',
                         help="Locks the set power limit. Once they are locked, they can not be modified until next RESET (e.g., Reboot).")
 
