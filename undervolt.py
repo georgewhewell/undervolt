@@ -248,7 +248,7 @@ def read_power_limit(msr):
 # Use at your own risk!
 def set_power_limit(power_limit, msr):
     def from_seconds(val, unit):
-        # The formula 2^x*(1+y/4) has two variables and has to be solved analytically
+        # The formula 2^x*(1+y/4) has two variables and can not be solved analytically
         # y is 2 bytes, hence we only need to check 4 values
         val = val * unit
         if log2(val / 1.75) >= 0x1f:
