@@ -94,6 +94,9 @@ following contents, replacing the arguments with your own offsets::
 
   [Unit]
   Description=undervolt
+  After=suspend.target
+  After=hibernate.target
+  After=hybrid-sleep.target
 
   [Service]
   Type=oneshot
@@ -102,11 +105,22 @@ following contents, replacing the arguments with your own offsets::
   # If you want to run from source:
   # ExecStart=/path/to/undervolt.py -v --core -150 --cache -150 --gpu -100
 
+  [Install]
+  WantedBy=multi-user.target
+  WantedBy=suspend.target
+  WantedBy=hibernate.target
+  WantedBy=hybrid-sleep.target
+
 Check that your script works::
 
   $ systemctl start undervolt
 
-Then create a timer ``/etc/systemd/system/undervolt.timer`` to trigger the task periodically: ::
+Now you may enable undervolt service::
+
+  $ systemctl enable undervolt
+
+Or, if you have issue with settings persistence, create a timer ``/etc/systemd/system/undervolt.timer``
+to trigger the task periodically: ::
 
   [Unit]
   Description=Apply undervolt settings
