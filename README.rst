@@ -180,6 +180,7 @@ Undervolting should work on any CPU later than Haswell.
 Acer Aspire 7 (A715-71G)     i5-7300HQ Yes
 Acer Aspire E 15 (E5-575G)   i5-7200U  Yes
 Acer Nitro 5                 i5-7300HQ Yes
+Acer Nitro 5  (An515-52)     i5-8300H  Yes
 Asus FX504GE                 i7-8750H  Yes
 Asus GL703GE                 i7-8750H  Yes
 Dell G5                      i7-8750H  Yes
