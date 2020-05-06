@@ -39,9 +39,7 @@ PLANES = {
 }
 
 MSR = namedtuple('MSR', ['addr_voltage_offsets', 'addr_units', 'addr_power_limits', 'addr_temp'])
-ADDRESSES = {
-    '*': MSR(0x150, 0x606, 0x610, 0x1a2) # Default (Core iX 6th, 7th, 8th, 9th gen etc.)
-}
+ADDRESSES = MSR(0x150, 0x606, 0x610, 0x1a2) # Default (Core iX 6th, 7th, 8th, 9th gen etc.)
 
 # 0.2.9 removed --temp-ac flag without warning
 # accept it for now and show deprecation
@@ -365,7 +363,6 @@ def main():
                         help="extract values from ThrottleStop")
     parser.add_argument('--tsindex', type=int,
                         default=0, help="ThrottleStop profile index")
-    parser.add_argument('--cpu', default='*')
     parser.add_argument('-p1', '--power-limit-long', nargs=2, help="P1 Power Limit (W) and Time Window (s)", metavar=('POWER_LIMIT', 'TIME_WINDOW'))
     parser.add_argument('-p2', '--power-limit-short', nargs=2, help="P2 Power Limit (W) and Time Window (s)", metavar=('POWER_LIMIT', 'TIME_WINDOW'))
     parser.add_argument('--lock-power-limit', action='store_true',
@@ -383,10 +380,7 @@ def main():
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
     
-    if not args.cpu in ADDRESSES:
-        logging.error("CPU {} not in known addresses!".format(args.cpu))
-        sys.exit(1)
-    msr = ADDRESSES[args.cpu]
+    msr = ADDRESSES
 
     if not glob('/dev/cpu/*/msr'):
         subprocess.check_call(['modprobe', 'msr'])
