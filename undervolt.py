@@ -25,7 +25,7 @@ except ImportError:
     from math import log
     def log2(x):
         return log(x, 2)
-__version__ = '0.2.11'
+__version__ = '0.3.0'
 
 AC_STATE_NODE = os.environ.get(
     'AC_STATE_NODE', (glob('/sys/class/power_supply/AC*/online') + [None])[0])
