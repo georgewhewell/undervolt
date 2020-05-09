@@ -33,12 +33,13 @@ Examples
 Read current offsets::
 
     $ undervolt --read
-    temperature target: -0 (100C)
-    core: 0.0 mV
-    gpu: -19.53 mV
-    cache: -30.27 mV
-    uncore: -29.3 mV
-    analogio: -70.31 mV
+    temperature target: -25 (75C)
+    core: -110.35 mV
+    gpu: -49.8 mV
+    cache: -110.35 mV
+    uncore: -59.57 mV
+    analogio: -59.57 mV
+    powerlimit: 35.0W (short: 1.0s - enabled) / 35.0W (long: 1.0s - enabled)
 
 Apply -100mV offset to CPU Core and Cache::
 
@@ -51,6 +52,10 @@ Apply -75mV offset to GPU, -100mV to all other planes::
 Set temperature target to 97C::
 
     $ undervolt --temp 97
+
+Set powerlimit 1 to 35W, 10s:
+
+    $ undervolt -p1 35 10
 
 Generated the command to run to recreate your Throttlestop settings::
 
@@ -65,21 +70,31 @@ Usage
 .. code-block::
 
     $ undervolt -h
-    usage: undervolt.py [-h] [-v] [-f] [-r] [-t TEMP]
+    usage: undervolt.py [-h] [--version] [-v] [-f] [-r] [-t TEMP]
                         [--temp-bat TEMP_BAT] [--throttlestop THROTTLESTOP]
-                        [--tsindex TSINDEX] [--core CORE] [--gpu GPU]
-                        [--cache CACHE] [--uncore UNCORE] [--analogio ANALOGIO]
+                        [--tsindex TSINDEX] [-p1 POWER_LIMIT TIME_WINDOW]
+                        [-p2 POWER_LIMIT TIME_WINDOW] [--lock-power-limit]
+                        [--core CORE] [--gpu GPU] [--cache CACHE]
+                        [--uncore UNCORE] [--analogio ANALOGIO]
 
     optional arguments:
       -h, --help            show this help message and exit
+      --version             show program's version number and exit
       -v, --verbose         print debug info
       -f, --force           allow setting positive offsets
       -r, --read            read existing values
-      -t TEMP, --temp TEMP  set temperature target on AC (and battery power if --temp-bat is not used)
+      -t TEMP, --temp TEMP  set temperature target on AC (and battery power if
+                            --temp-bat is not used)
       --temp-bat TEMP_BAT   set temperature target on battery power
       --throttlestop THROTTLESTOP
                             extract values from ThrottleStop
       --tsindex TSINDEX     ThrottleStop profile index
+      -p1 POWER_LIMIT TIME_WINDOW, --power-limit-long POWER_LIMIT TIME_WINDOW
+                            P1 Power Limit (W) and Time Window (s)
+      -p2 POWER_LIMIT TIME_WINDOW, --power-limit-short POWER_LIMIT TIME_WINDOW
+                            P2 Power Limit (W) and Time Window (s)
+      --lock-power-limit    Locks the set power limit. Once they are locked, they
+                            can not be modified until next RESET (e.g., Reboot).
       --core CORE           offset (mV)
       --gpu GPU             offset (mV)
       --cache CACHE         offset (mV)
