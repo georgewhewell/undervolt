@@ -396,7 +396,7 @@ def main():
         subprocess.check_call(['modprobe', 'msr'])
 
     if (args.core or args.cache) and args.core != args.cache:
-        logging.warn(
+        logging.warning(
             "You have supplied different offsets for Core and Cache. "
             "The smaller of the two (or none if you only supplied one) will be applied to both planes."
         )
