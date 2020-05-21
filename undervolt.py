@@ -357,7 +357,7 @@ def assert_root():
     Checks whether the user has root privileges, exit otherwise
     """
     if os.geteuid() != 0:
-        exit("You need to have root privileges to run this script these options.\nRerun with 'sudo'.")
+        exit("You need to have root privileges to run this script with these options.\nRerun with 'sudo'.")
 
 def main():
     parser = argparse.ArgumentParser()
