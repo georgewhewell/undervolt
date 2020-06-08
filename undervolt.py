@@ -69,6 +69,8 @@ def write_msr(val, addr):
     values from register addr.
     Writes to all msr node on all CPUs available.
     """
+    assert_root()
+    
     for i in valid_cpus():
         c = '/dev/cpu/%d/msr' % i
         if not os.path.exists(c):
@@ -84,6 +86,8 @@ def read_msr(addr, cpu=0):
     """
     Read a value from single msr node on given CPU (defaults to first)
     """
+    assert_root()
+
     n = '/dev/cpu/%d/msr' % (cpu,)
     f = os.open(n, os.O_RDONLY)
     os.lseek(f, addr, os.SEEK_SET)
@@ -348,6 +352,12 @@ def read_ac_state():
     # Assume no battery if the /sys entry is missing.
     return True
 
+def assert_root():
+    """
+    Checks whether the user has root privileges, exit otherwise
+    """
+    if os.geteuid() != 0:
+        exit("You need to have root privileges to run this script with these options.\nRerun with 'sudo'.")
 
 def main():
     parser = argparse.ArgumentParser()
@@ -386,7 +396,7 @@ def main():
         subprocess.check_call(['modprobe', 'msr'])
 
     if (args.core or args.cache) and args.core != args.cache:
-        logging.warn(
+        logging.warning(
             "You have supplied different offsets for Core and Cache. "
             "The smaller of the two (or none if you only supplied one) will be applied to both planes."
         )
