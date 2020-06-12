@@ -199,6 +199,7 @@ Acer Nitro 5  (An515-52)           i5-8300H  Yes
 Asus FX504GE                       i7-8750H  Yes
 Asus GL703GE                       i7-8750H  Yes
 Dell G5                            i7-8750H  Yes
+Dell Inspiron 7560                 i7-7500U  Yes
 Dell Latitude 5400                 i7-8665U  Yes
 Dell Latitude 5480                 i5-6300U  Yes
 Dell Latitude 7390                 i7-8650U  Yes
