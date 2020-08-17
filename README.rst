@@ -219,6 +219,7 @@ Dell XPS 15 7590                   i9-9980HK Yes
 HP Spectre X360                    i7-8809G  Yes
 HP Zbook Studio G5                 i7-8750H  Yes
 Lenovo AIO Y910 27ISH              i7-6700   Yes
+Lenovo IdeaCentre Q190             1017U     No
 Lenovo Thinkpad T440p              i5-4300M  Yes
 Lenovo Thinkpad T470p              i7-7700HQ Yes
 Lenovo Thinkpad x250               i7-5600U  Yes
