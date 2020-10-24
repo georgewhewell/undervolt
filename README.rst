@@ -224,6 +224,7 @@ Lenovo AIO Y910 27ISH              i7-6700   Yes
 Lenovo IdeaCentre Q190             1017U     No
 Lenovo Thinkpad T440p              i5-4300M  Yes
 Lenovo Thinkpad T470p              i7-7700HQ Yes
+Lenovo Thinkpad T470p              i7-7820HQ Yes
 Lenovo Thinkpad x250               i7-5600U  Yes
 Lenovo Thinkpad X1 Carbon          i7-6600U  Yes
 Lenovo Thinkpad X1 Extreme         i7-8750H  Yes
