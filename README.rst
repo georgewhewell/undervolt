@@ -259,6 +259,7 @@ Troubleshooting
   model-specific registers. Disable UEFI Secure Boot in your system's BIOS
   and the error should go away.
 
+- Undervolt has no effect - Your device BIOS might be blocking it. Check the wiki (https://github.com/georgewhewell/undervolt/wiki) to find notes for your hardware
 
 GUI
 ----------------
