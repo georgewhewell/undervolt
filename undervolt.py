@@ -393,6 +393,7 @@ def main():
     msr = ADDRESSES
 
     if not glob('/dev/cpu/*/msr'):
+        assert_root()
         subprocess.check_call(['modprobe', 'msr'])
 
     if (args.core or args.cache) and args.core != args.cache:
