@@ -25,7 +25,7 @@ From PyPi::
 
 From source::
 
-    $ git clone https://github.com/georgewhewell/undervolt.git
+    $ pip install git+https://github.com/georgewhewell/undervolt.git
 
 Examples
 --------
@@ -190,13 +190,13 @@ Hardware support
 Undervolting should work on any CPU later than Haswell.
 
 ================================== ========= ==========
-      System                          CPU     Working? 
+      System                          CPU     Working?
 ================================== ========= ==========
 Acer Aspire 7 (A715-71G)           i5-7300HQ Yes
 Acer Aspire E 15 (E5-575G)         i5-7200U  Yes
 Acer Nitro 5                       i5-7300HQ Yes
 Acer Nitro 5  (An515-52)           i5-8300H  Yes
-Acer Swift 7 (SF714)               i5-8200Y  Yes 
+Acer Swift 7 (SF714)               i5-8200Y  Yes
 Asus FX504GE                       i7-8750H  Yes
 Asus GL703GE                       i7-8750H  Yes
 Dell G5                            i7-8750H  Yes
