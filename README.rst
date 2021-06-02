@@ -10,8 +10,11 @@ undervolt |travis|
 
 *undervolt* is a program for undervolting Intel CPUs under Linux. It works in
 a similar manner to the Windows program *ThrottleStop* (i.e, `MSR 0x150`). You
-can apply a fixed voltage offset to one of 5 voltage planes, and override your
-systems temperature target (CPU will throttle when this temperature is reached).
+can apply a fixed voltage offset to one of 5 voltage planes, override your
+systems temperature target (CPU will throttle when this temperature is reached),
+and adjust the system's short and long power budgets (clocks and thus voltages
+will be altered in order to keep total power usage in these periods under the
+configured limits).
 
 For more information, read
 `here <https://github.com/mihic/linux-intel-undervolt>`_.
