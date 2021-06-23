@@ -29,6 +29,10 @@ From PyPi::
 From source::
 
     $ git clone https://github.com/georgewhewell/undervolt.git
+    
+    
+Note for custom kernel users: the module 'msr' ("CONFIG_X86_MSR") must be enabled in the kernel options (Processor type & features -> Model-specific register support)
+
 
 Examples
 --------
