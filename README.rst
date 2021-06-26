@@ -196,59 +196,59 @@ Hardware support
 
 Undervolting should work on any CPU later than Haswell.
 
-================================== ========= ==========
-      System                          CPU     Working? 
-================================== ========= ==========
-Acer Aspire 7 (A715-71G)           i5-7300HQ Yes
-Acer Aspire E 15 (E5-575G)         i5-7200U  Yes
-Acer Nitro 5                       i5-7300HQ Yes
-Acer Nitro 5  (An515-52)           i5-8300H  Yes
-Acer Swift 7 (SF714)               i5-8200Y  Yes 
-Asus FX504GE                       i7-8750H  Yes
-Asus GL703GE                       i7-8750H  Yes
-Dell G5                            i7-8750H  Yes
-Dell G5 5590                       i7-9750H  Yes
-Dell Inspiron 7560                 i7-7500U  Yes
-Dell Latitude 3301                 i5-8265U  Yes
-Dell Latitude 5400                 i7-8665U  Yes
-Dell Latitude 5480                 i5-6300U  Yes
-Dell Latitude 7390                 i7-8650U  Yes
-Dell Precision 5530                i9-8950HK Yes
-Dell Precision 7530                i9-8950HK Yes
-Dell Precision 7730                E-2176M   Yes
-Dell Precision 7740                E-2286M   Yes
-Dell Precision M3800               i7-4712HQ Yes
-Dell XPS 13 9343                   i5-5200U  Yes
-Dell XPS 13 9350                   i7-6560U  Yes
-Dell XPS 13 9360                   i7-7560U  Yes
-Dell XPS 15 7590                   i7-9750H  Yes
-Dell XPS 15 7590                   i9-9980HK Yes
-Dell XPS 15 9530                   i7-4712HQ Yes
-Dell XPS 15 9550                   i7-6700HQ Yes
-Dell XPS 15 9560                   i7-7700HQ Yes
-Dell XPS 15 9570                   i9-8950HK Yes
-Dell XPS 15 9575                   i7-8705G  Yes
-HP Omen 17-an061ur                 i7-7700HQ Yes
-HP Spectre X360                    i7-8809G  Yes
-HP Zbook Studio G5                 i7-8750H  Yes
-Lenovo AIO Y910 27ISH              i7-6700   Yes
-Lenovo IdeaCentre Q190             1017U     No
-Lenovo Thinkpad T430               i7-3610QM No
-Lenovo Thinkpad T440p              i5-4300M  Yes
-Lenovo Thinkpad T470p              i7-7700HQ Yes
-Lenovo Thinkpad T470p              i7-7820HQ Yes
-Lenovo Thinkpad X1 Carbon          i7-6600U  Yes
-Lenovo Thinkpad X1 Extreme         i7-8750H  Yes
-Lenovo Thinkpad X1 Extreme Gen 2   i7-9750H  Yes
-Lenovo Thinkpad x250               i7-5600U  Yes
-Lenovo X1 Gen 5                    i7-7500U  Yes
-Lenovo X1 Yoga Gen 2               i7-7600U  Yes
-Lenovo Yoga 920                    i7-8550U  Yes
-MSI GP73 Leopard 8RF               i7-8750H  Yes
-MacBook Air Late 2015              i5-5250U  Yes
-MacBook Air Mid 2013               i5-4250U  Yes
-Toshiba Chromebook 2               N2840     No
-================================== ========= ==========
+================================== ========= ========== ======
+      System                          CPU     Working?   Wiki
+================================== ========= ========== ======
+Acer Aspire 7 (A715-71G)           i5-7300HQ Yes        no
+Acer Aspire E 15 (E5-575G)         i5-7200U  Yes        no
+Acer Nitro 5                       i5-7300HQ Yes        no
+Acer Nitro 5  (An515-52)           i5-8300H  Yes        no
+Acer Swift 7 (SF714)               i5-8200Y  Yes        no
+Asus FX504GE                       i7-8750H  Yes        no
+Asus GL703GE                       i7-8750H  Yes        no
+Dell G5                            i7-8750H  Yes        yes
+Dell G5 5590                       i7-9750H  Yes        yes
+Dell Inspiron 7560                 i7-7500U  Yes        no
+Dell Latitude 3301                 i5-8265U  Yes        no
+Dell Latitude 5400                 i7-8665U  Yes        no
+Dell Latitude 5480                 i5-6300U  Yes        no
+Dell Latitude 7390                 i7-8650U  Yes        no
+Dell Precision 5530                i9-8950HK Yes        no
+Dell Precision 7530                i9-8950HK Yes        no
+Dell Precision 7730                E-2176M   Yes        no
+Dell Precision 7740                E-2286M   Yes        no
+Dell Precision M3800               i7-4712HQ Yes        no
+Dell XPS 13 9343                   i5-5200U  Yes        no
+Dell XPS 13 9350                   i7-6560U  Yes        no
+Dell XPS 13 9360                   i7-7560U  Yes        no
+Dell XPS 15 7590                   i7-9750H  Yes        no
+Dell XPS 15 7590                   i9-9980HK Yes        no
+Dell XPS 15 9530                   i7-4712HQ Yes        no
+Dell XPS 15 9550                   i7-6700HQ Yes        no
+Dell XPS 15 9560                   i7-7700HQ Yes        no
+Dell XPS 15 9570                   i9-8950HK Yes        no
+Dell XPS 15 9575                   i7-8705G  Yes        no
+HP Omen 17-an061ur                 i7-7700HQ Yes        no
+HP Spectre X360                    i7-8809G  Yes        no
+HP Zbook Studio G5                 i7-8750H  Yes        no
+Lenovo AIO Y910 27ISH              i7-6700   Yes        no
+Lenovo IdeaCentre Q190             1017U     No         no
+Lenovo Thinkpad T430               i7-3610QM No         no
+Lenovo Thinkpad T440p              i5-4300M  Yes        no
+Lenovo Thinkpad T470p              i7-7700HQ Yes        no
+Lenovo Thinkpad T470p              i7-7820HQ Yes        no
+Lenovo Thinkpad X1 Carbon          i7-6600U  Yes        no
+Lenovo Thinkpad X1 Extreme         i7-8750H  Yes        no
+Lenovo Thinkpad X1 Extreme Gen 2   i7-9750H  Yes        no
+Lenovo Thinkpad x250               i7-5600U  Yes        no
+Lenovo X1 Gen 5                    i7-7500U  Yes        no
+Lenovo X1 Yoga Gen 2               i7-7600U  Yes        no
+Lenovo Yoga 920                    i7-8550U  Yes        no
+MSI GP73 Leopard 8RF               i7-8750H  Yes        no
+MacBook Air Late 2015              i5-5250U  Yes        no
+MacBook Air Mid 2013               i5-4250U  Yes        no
+Toshiba Chromebook 2               N2840     No         no
+================================== ========= ========== ======
 
 Troubleshooting
 ---------------
