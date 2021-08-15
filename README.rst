@@ -28,11 +28,9 @@ From PyPi::
 
 From source::
 
-    $ git clone https://github.com/georgewhewell/undervolt.git
-    
+    $ pip install git+https://github.com/georgewhewell/undervolt.git    
     
 Note for custom kernel users: the module 'msr' ("CONFIG_X86_MSR") must be enabled in the kernel options (Processor type & features -> Model-specific register support)
-
 
 Examples
 --------
@@ -197,7 +195,7 @@ Hardware support
 Undervolting should work on any CPU later than Haswell.
 
 ================================== ========= ==========
-      System                          CPU     Working? 
+      System                          CPU     Working?
 ================================== ========= ==========
 Acer Aspire 7 (A715-71G)           i5-7300HQ Yes
 Acer Aspire E 15 (E5-575G)         i5-7200U  Yes
@@ -209,6 +207,7 @@ Asus FX504GE                       i7-8750H  Yes
 Asus GL703GE                       i7-8750H  Yes
 Dell G5                            i7-8750H  Yes
 Dell G5 5590                       i7-9750H  Yes
+Dell Inspiron 5577                 i7-7700HQ  Yes
 Dell Inspiron 7560                 i7-7500U  Yes
 Dell Latitude 3301                 i5-8265U  Yes
 Dell Latitude 5400                 i7-8665U  Yes
@@ -232,12 +231,14 @@ Dell XPS 15 9575                   i7-8705G  Yes
 HP Omen 17-an061ur                 i7-7700HQ Yes
 HP Spectre X360                    i7-8809G  Yes
 HP Zbook Studio G5                 i7-8750H  Yes
+Intel NUC7i3BNK                    i3-7100U  Yes
 Lenovo AIO Y910 27ISH              i7-6700   Yes
 Lenovo IdeaCentre Q190             1017U     No
 Lenovo Thinkpad T430               i7-3610QM No
 Lenovo Thinkpad T440p              i5-4300M  Yes
 Lenovo Thinkpad T470p              i7-7700HQ Yes
 Lenovo Thinkpad T470p              i7-7820HQ Yes
+Lenovo Thinkpad T480s              i5-8250U  Yes
 Lenovo Thinkpad X1 Carbon          i7-6600U  Yes
 Lenovo Thinkpad X1 Extreme         i7-8750H  Yes
 Lenovo Thinkpad X1 Extreme Gen 2   i7-9750H  Yes
