@@ -208,6 +208,7 @@ Asus FX504GE                       i7-8750H  Yes
 Asus GL703GE                       i7-8750H  Yes
 Dell G5                            i7-8750H  Yes
 Dell G5 5590                       i7-9750H  Yes
+Dell Inspiron 5577                 i7-7700HQ  Yes
 Dell Inspiron 7560                 i7-7500U  Yes
 Dell Latitude 3301                 i5-8265U  Yes
 Dell Latitude 5400                 i7-8665U  Yes
