@@ -232,6 +232,7 @@ Dell XPS 15 9575                   i7-8705G  Yes
 HP Omen 17-an061ur                 i7-7700HQ Yes
 HP Spectre X360                    i7-8809G  Yes
 HP Zbook Studio G5                 i7-8750H  Yes
+Intel NUC7i3BNK                    i3-7100U  Yes
 Lenovo AIO Y910 27ISH              i7-6700   Yes
 Lenovo IdeaCentre Q190             1017U     No
 Lenovo Thinkpad T430               i7-3610QM No
