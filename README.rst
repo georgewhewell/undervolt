@@ -239,6 +239,7 @@ Lenovo Thinkpad T440p              i5-4300M  Yes
 Lenovo Thinkpad T470p              i7-7700HQ Yes
 Lenovo Thinkpad T470p              i7-7820HQ Yes
 Lenovo Thinkpad T480s              i5-8250U  Yes
+Lenovo Thinkpad T490               i5-8265U  Yes
 Lenovo Thinkpad X1 Carbon          i7-6600U  Yes
 Lenovo Thinkpad X1 Extreme         i7-8750H  Yes
 Lenovo Thinkpad X1 Extreme Gen 2   i7-9750H  Yes
