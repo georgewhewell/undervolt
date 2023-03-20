@@ -45,27 +45,22 @@ Read current offsets::
     uncore: -59.57 mV
     analogio: -59.57 mV
     powerlimit: 35.0W (short: 1.0s - enabled) / 35.0W (long: 1.0s - enabled)
-    turbo: enabled
 
-Apply -100mV offset to CPU Core and Cache:
+Apply -100mV offset to CPU Core and Cache::
 
     $ undervolt --core -100 --cache -100
 
-Apply -75mV offset to GPU, -100mV to all other planes:
+Apply -75mV offset to GPU, -100mV to all other planes::
 
     $ undervolt --gpu -75 --core -100 --cache -100 --uncore -100 --analogio -100
 
-Set temperature target to 97C:
+Set temperature target to 97C::
 
     $ undervolt --temp 97
 
 Set powerlimit 1 to 35W, 10s:
 
     $ undervolt -p1 35 10
-
-Set Intel Turbo disabled:
-
-    $ undervolt --turbo 1
 
 Generated the command to run to recreate your Throttlestop settings::
 
@@ -93,7 +88,6 @@ Usage
       -v, --verbose         print debug info
       -f, --force           allow setting positive offsets
       -r, --read            read existing values
-      --turbo               Changes the Intel Turbo feature status (1 is disabled and 0 is enabled)
       -t TEMP, --temp TEMP  set temperature target on AC (and battery power if
                             --temp-bat is not used)
       --temp-bat TEMP_BAT   set temperature target on battery power
@@ -253,7 +247,6 @@ Lenovo Thinkpad x250               i7-5600U  Yes
 Lenovo X1 Gen 5                    i7-7500U  Yes
 Lenovo X1 Yoga Gen 2               i7-7600U  Yes
 Lenovo Yoga 920                    i7-8550U  Yes
-MSI GE60 2QD Apache                i7-4720HQ Yes
 MSI GP73 Leopard 8RF               i7-8750H  Yes
 MacBook Air Late 2015              i5-5250U  Yes
 MacBook Air Mid 2013               i5-4250U  Yes

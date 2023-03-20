@@ -367,7 +367,6 @@ def main():
     parser.add_argument('-f', '--force', action='store_true',
                         help="allow setting positive offsets")
     parser.add_argument('-r', '--read', action="store_true", help="read existing values")
-    parser.add_argument('--turbo', type=int, help="Changes the Intel Turbo feature status (1 is disabled and 0 is enabled)")
     parser.add_argument('-t', '--temp', type=int, help="set temperature target on AC (and battery power if --temp-bat is not used)")
     parser.add_argument('--temp-bat', type=int, help="set temperature target on battery power")
     parser.add_argument('--throttlestop', type=str,
@@ -466,19 +465,6 @@ def main():
             'enabled' if power_limit.long_term_enabled else 'disabled',
             ' [locked]' if power_limit.locked else ''
         ))
-
-    newIntelTurboState = int(getattr(args, 'turbo'))
-    if newIntelTurboState >= 0:
-        if newIntelTurboState == 0:
-            print("New Intel Turbo State ENABLED")
-        else:
-            print("New Intel Turbo State DISABLED")
-        
-        fileName = '/sys/devices/system/cpu/intel_pstate/no_turbo'
-        fileHandle = os.open(fileName, os.O_WRONLY)
-        os.write(fileHandle, str.encode(str(newIntelTurboState)))
-        os.close(fileHandle)
-
 
 if __name__ == '__main__':
     main()
